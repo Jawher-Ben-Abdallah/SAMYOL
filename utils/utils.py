@@ -22,6 +22,6 @@ def download_model_weights(model):
             print(f"Downloading {model} weights to {file_path} from {url}")
             urlretrieve(url, file_path)
         except (URLError, IOError) as _:
-            print("Could not download Model Weights.")
+            print(f"Could not download {model} Model Weights.")
 
 
