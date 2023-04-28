@@ -19,7 +19,11 @@ parser.add_argument(
 
 if __name__ == "__main__":
     args = parser.parse_args()
+    
     if (not args.yolo_checkpoint):
-        utils.download_model_weights("YOLOs")
+        utils.download_model_weights("YOLO")
     if (not args.sam_checkpoint):
         utils.download_model_weights("SAM")
+
+
+    

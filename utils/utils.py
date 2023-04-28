@@ -6,9 +6,11 @@ def download_model_weights(model):
     
     root = "checkpoints"
     match model:
-        case "YOLOs":
+        case "YOLO":
+            # download YOLOs by default
             url = "https://github.com/ultralytics/assets/releases/download/v0.0.0/yolov8s.pt"
         case "SAM":
+            # downlaod SAM: ViT-H by default
             url = "https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth"
         case _:
             raise ValueError("Invalid Model.")
