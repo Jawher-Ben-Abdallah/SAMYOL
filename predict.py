@@ -13,7 +13,12 @@ parser.add_argument(
 
 parser.add_argument(
     "--sam-checkpoint", type=str, required=False,
-    help="THe path to the SAM model checkpoint"
+    help="The path to the SAM model checkpoint"
+)
+
+parser.add_argument(
+    "--image", type=str, required=True,
+    help="The path to the input image."
 )
 
 
@@ -24,6 +29,15 @@ if __name__ == "__main__":
         utils.download_model_weights("YOLO")
     if (not args.sam_checkpoint):
         utils.download_model_weights("SAM")
+
+    # run YOLO to get scene BBoxes
+
+
+    # run SAM to get the segmentations
+
+    
+
+
 
 
     
