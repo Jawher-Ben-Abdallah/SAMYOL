@@ -31,9 +31,10 @@ if __name__ == "__main__":
         utils.download_model_weights("SAM")
 
     # run YOLO to get scene BBoxes
-
+    # input = image (numpy array), output = list of dicts [{image_id: _, class_id: _, bbox: []}]
 
     # run SAM to get the segmentations
+    # input = image and the list of dicts, output = segmentation masks (in any format Rim likes)
 
     
 
