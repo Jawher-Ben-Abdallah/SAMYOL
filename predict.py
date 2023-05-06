@@ -51,11 +51,13 @@ if __name__ == "__main__":
         )
 
     # run SAM to get the segmentations
-    list_of_masks = utils.segment_objects_in_image (args.model_type, 
-                                                    args.sam_checkpoint, 
-                                                    args.device, 
-                                                    detections, 
-                                                    image)
+    list_of_masks = utils.segment_objects_in_image (
+        args.model_type, 
+        args.sam_checkpoint, 
+        args.device, 
+        detections, 
+        image
+        )
     
 
     
