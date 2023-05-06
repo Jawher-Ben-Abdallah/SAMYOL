@@ -2,7 +2,7 @@ import numpy as np
 from ultralytics import YOLO
 
 
-def run_object_detection(weights_path, image):
+def run_object_detection_inference(weights_path, image):
     model = YOLO(weights_path)
     detections = model.predict(
         image, 
@@ -27,3 +27,9 @@ def run_object_detection_postprocess(detections):
                 }
             )
     return object_detection_predictions
+
+
+def get_postprocessed_detections(weights_path, image):
+    detections = run_object_detection_inference(weights_path, image)
+    detections = run_object_detection_postprocess(detections)
+    return detections

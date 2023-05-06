@@ -1,2 +1,2 @@
 from .utils import download_model_weights, load_image
-from .yolo_utils import run_object_detection, run_object_detection_postprocess
+from .yolo_utils import get_postprocessed_detections        
