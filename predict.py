@@ -17,7 +17,7 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "--image", type=str, required=True,
+    "--input", type=str, required=True,
     help="The path to the input image."
 )
 
@@ -27,13 +27,21 @@ if __name__ == "__main__":
     
     if (not args.yolo_checkpoint):
         utils.download_model_weights("YOLO")
-    if (not args.sam_checkpoint):
-        utils.download_model_weights("SAM")
+        args.yolo_checkpoint = "./checkpoints/yolov8s.pt"
+    # if (not args.sam_checkpoint):
+    #     utils.download_model_weights("SAM")
+    #     args.sam_checkpoint = "./checkpoints/sam_vit_h_4b8939.pth"
+
+    image = utils.load_image(args.input)
 
     # run YOLO to get scene BBoxes
-    # input = image (numpy array), output = list of dicts [{image_id: _, class_id: _, bbox: []}]
+    detections = utils.get_postprocessed_detections(
+        args.yolo_checkpoint,
+        image
+        )
 
     # run SAM to get the segmentations
+    masks = {}
     # input = image and the list of dicts, output = segmentation masks (in any format Rim likes)
 
     

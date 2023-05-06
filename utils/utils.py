@@ -1,6 +1,8 @@
 import os
+import cv2
 from urllib.request import urlretrieve
 from urllib.error import URLError
+import matplotlib.pyplot as plt
 
 def download_model_weights(model):
     
@@ -27,3 +29,13 @@ def download_model_weights(model):
             print(f"Could not download {model} Model Weights.")
 
 
+def load_image(image_path):
+    image = cv2.imread(image_path)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    return image
+
+
+def show_box(box, ax):
+    x0, y0 = box[0], box[1]
+    w, h = box[2] - box[0], box[3] - box[1]
+    ax.add_patch(plt.Rectangle((x0, y0), w, h, edgecolor='green', facecolor=(0,0,0,0), lw=2))
