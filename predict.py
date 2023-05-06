@@ -17,7 +17,7 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "--image", type=str, required=True,
+    "--input", type=str, required=True,
     help="The path to the input image."
 )
 
@@ -30,10 +30,14 @@ if __name__ == "__main__":
     if (not args.sam_checkpoint):
         utils.download_model_weights("SAM")
 
+    image = utils.load_image(args.input)
+
     # run YOLO to get scene BBoxes
+    detections = {}
     # input = image (numpy array), output = list of dicts [{image_id: _, class_id: _, bbox: []}]
 
     # run SAM to get the segmentations
+    masks = {}
     # input = image and the list of dicts, output = segmentation masks (in any format Rim likes)
 
     
