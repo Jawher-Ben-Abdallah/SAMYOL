@@ -133,3 +133,6 @@ checkpoints/
 
 # Model weights
 *.pth
+
+
+main.py
