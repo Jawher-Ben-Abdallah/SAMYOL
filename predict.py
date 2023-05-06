@@ -17,8 +17,18 @@ parser.add_argument(
 )
 
 parser.add_argument(
+    "--model-type", type=str, required=False,
+    help="Model type"
+)
+
+parser.add_argument(
     "--input", type=str, required=True,
     help="The path to the input image."
+)
+
+parser.add_argument(
+    "--device", type=str, default="cpu", required=False,
+    help="Device on which to run the model."
 )
 
 
@@ -41,8 +51,12 @@ if __name__ == "__main__":
         )
 
     # run SAM to get the segmentations
-    masks = {}
-    # input = image and the list of dicts, output = segmentation masks (in any format Rim likes)
+    list_of_masks = utils.segment_objects_in_image (args.model_type, 
+                                                    args.sam_checkpoint, 
+                                                    args.device, 
+                                                    detections, 
+                                                    image)
+    
 
     
 
