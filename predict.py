@@ -1,4 +1,4 @@
-import utils
+import yolo_anything
 import argparse
 
 
@@ -36,33 +36,17 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     if (not args.yolo_checkpoint):
-        utils.download_model_weights("YOLO")
+        yolo_anything.download_model_weights("YOLO")
         args.yolo_checkpoint = "./checkpoints/yolov8s.pt"
     # if (not args.sam_checkpoint):
-    #     utils.download_model_weights("SAM")
+    #     yolo_anything.download_model_weights("SAM")
     #     args.sam_checkpoint = "./checkpoints/sam_vit_h_4b8939.pth"
 
-    image = utils.load_image(args.input)
-
-    # run YOLO to get scene BBoxes
-    detections = utils.get_postprocessed_detections(
+    detections, list_of_masks = yolo_anything.predict(
+        args.input,
         args.yolo_checkpoint,
-        image
-        )
-
-    # run SAM to get the segmentations
-    list_of_masks = utils.segment_objects_in_image (
-        args.model_type, 
-        args.sam_checkpoint, 
-        args.device, 
-        detections, 
-        image
-        )
-    
-
-    
-
-
-
-
+        args.model_type,
+        args.sam_checkpoint,
+        args.device
+    )
     
