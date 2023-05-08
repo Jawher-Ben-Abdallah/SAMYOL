@@ -49,4 +49,3 @@ if __name__ == "__main__":
         args.sam_checkpoint,
         args.device
     )
-    
