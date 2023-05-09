@@ -1,4 +1,4 @@
-import yolo_anything
+import samy
 import argparse
 
 
@@ -22,7 +22,7 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "--input", type=str, required=True,
+    "--input", type=str, required=False,
     help="The path to the input image."
 )
 
@@ -36,16 +36,16 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     if (not args.yolo_checkpoint):
-        yolo_anything.download_model_weights("YOLO")
+        samy.download_model_weights("YOLO")
         args.yolo_checkpoint = "./checkpoints/yolov8s.pt"
     # if (not args.sam_checkpoint):
     #     yolo_anything.download_model_weights("SAM")
     #     args.sam_checkpoint = "./checkpoints/sam_vit_h_4b8939.pth"
 
-    detections, list_of_masks = yolo_anything.predict(
-        args.input,
-        args.yolo_checkpoint,
-        args.model_type,
-        args.sam_checkpoint,
-        args.device
-    )
+    # detections, list_of_masks = yolo_anything.predict(
+    #     args.input,
+    #     args.yolo_checkpoint,
+    #     args.model_type,
+    #     args.sam_checkpoint,
+    #     args.device
+    # )

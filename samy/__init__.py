@@ -1,2 +1,2 @@
-from .yolo_anything import predict
+from .segtection import predict
 from utils import download_model_weights
