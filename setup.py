@@ -4,11 +4,11 @@ with open("README.md", "r") as f:
     long_description = f.read()
 
 setup(
-  name="YOLO_Anything",
+  name="SAMY",
   version="1.0.0",
   description="Combines YOLOv8 and SAM",
-  package_dir={"": "yolo_anything"},
-  packages=find_packages(where="yolo_anything"),
+  package_dir={"": "samy"},
+  packages=find_packages(where="samy"),
   long_description=long_description,
   long_description_content_type="text/markdown",
   url="https://github.com/Jawher-Ben-Abdallah/YOLO-SAM",
