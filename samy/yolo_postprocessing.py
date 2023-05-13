@@ -36,27 +36,27 @@ class YOLOPostProcessing():
     def get_yolo_6_postprocessing():
         print("Fetching yolo 6 postprocessing")
     
-    def get_yolo_7_postprocessing(img, outputs, colors, names): #img=cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    def get_yolo_7_postprocessing(img, detections): #img=cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         image = img.copy()
         image, ratio, dwdh = letterbox(image, auto=False)
 
-        ori_images = [img.copy()]
+        object_detection_predictions = []
 
-        for i,(batch_id,x0,y0,x1,y1,cls_id,score) in enumerate(outputs):
-            image = ori_images[int(batch_id)]
+        for i,(_ ,x0,y0,x1,y1,cls_id, _) in enumerate(detections):
             box = np.array([x0,y0,x1,y1])
             box -= np.array(dwdh*2)
             box /= ratio
-            box = box.round().astype(np.int32).tolist()
-            cls_id = int(cls_id)
-            score = round(float(score),3)
-            name = names[cls_id]
-            color = colors[name]
-            name += ' '+str(score)
-            cv2.rectangle(image,box[:2],box[2:],color,2)
-            cv2.putText(image,name,(box[0], box[1] - 2),cv2.FONT_HERSHEY_SIMPLEX,0.75,[225, 255, 255],thickness=2)  
+            
+            object_detection_predictions.append(
+                {
+                    'image_id': i,
+                    'class_id': int(cls_id),
+                    'bbox': box.round().astype(np.int32).tolist()
+                }
+            )
 
-        return Image.fromarray(ori_images[0]) #remove index
+        return object_detection_predictions
+    
     
     def get_yolo_8_postprocessing(detections):
         object_detection_predictions = []
@@ -72,6 +72,7 @@ class YOLOPostProcessing():
                     }
                 )
         return object_detection_predictions
+
 
     def get_yolo_nas_postprocessing():
         print("Fetching yolo nas postprocessing")
