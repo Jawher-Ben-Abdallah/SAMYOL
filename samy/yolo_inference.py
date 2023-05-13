@@ -1,7 +1,6 @@
 from ultralytics import YOLO
 from utils import letterbox
 import onnxruntime as ort
-import onnxruntime as ort
 from super_gradients.training import models
 
 
