@@ -5,29 +5,6 @@ from utils import letterbox
 
 
 
-class YOLOPostProcessing():
-    def get_yolo_7_preprocessing(img, session): #img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        image = img.copy()
-        image, _, _ = letterbox(image, auto=False)
-        image = image.transpose((2, 0, 1))
-        image = np.expand_dims(image, 0)
-        image = np.ascontiguousarray(image)
-
-        im = image.astype(np.float32)
-        im /= 255
-
-        outname = [i.name for i in session.get_outputs()]
-        outname
-
-        inname = [i.name for i in session.get_inputs()]
-        inname
-
-        inp = {inname[0]:im}
-
-        return outname, inp
-
-
-
 
 class YOLOPostProcessing():
     def __init__(self) -> None:
@@ -42,15 +19,18 @@ class YOLOPostProcessing():
 
         object_detection_predictions = []
 
-        for i,(_ ,x0,y0,x1,y1,cls_id, _) in enumerate(detections):
+        for i,(batch_id ,x0,y0,x1,y1,cls_id,score) in enumerate(detections):
+            score = round(float(score),3)
+
             box = np.array([x0,y0,x1,y1])
             box -= np.array(dwdh*2)
             box /= ratio
             
             object_detection_predictions.append(
                 {
-                    'image_id': i,
+                    'image_id': batch_id,
                     'class_id': int(cls_id),
+                    'score': score,
                     'bbox': box.round().astype(np.int32).tolist()
                 }
             )
@@ -61,13 +41,16 @@ class YOLOPostProcessing():
     def get_yolo_8_postprocessing(detections):
         object_detection_predictions = []
         for i, detection in enumerate(detections):
+
             class_labels = detection.names
             boxes = detection.boxes
+
             for box in boxes:
                 object_detection_predictions.append(
                     {
                         'image_id': i,
                         'class_id': class_labels[int(box.cls.item())],
+                        'score': box.conf.item(),
                         'bbox': box.xyxy[0].numpy().round().astype(np.int32).tolist()
                     }
                 )
