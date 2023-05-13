@@ -1,3 +1,6 @@
+import numpy as np
+
+
 class YOLOPostProcessing():
     def __init__(self) -> None:
         print("Did a bunch of stuff")
@@ -15,7 +18,7 @@ class YOLOPostProcessing():
         object_detection_predictions = []
         for i, detection in enumerate(detections):
             class_names = detection.class_names
-            labels = detection.predction.labels
+            labels = detection.prediction.labels
             confidence = detection.prediction.confidence
             bboxes = detection.prediction.bboxes_xyxy
 
@@ -24,6 +27,6 @@ class YOLOPostProcessing():
                     'image_id': i,
                     'class_id': class_names[int(label)],
                     'confidence': conf,
-                    'bbox': bbox
+                    'bbox': bbox.round().astype(np.int32).tolist()
                 })
         return object_detection_predictions
