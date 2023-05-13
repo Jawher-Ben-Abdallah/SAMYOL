@@ -58,8 +58,20 @@ class YOLOPostProcessing():
 
         return Image.fromarray(ori_images[0]) #remove index
     
-    def get_yolo_8_postprocessing():
-        print("Fetching yolo 8 postprocessing")
+    def get_yolo_8_postprocessing(detections):
+        object_detection_predictions = []
+        for i, detection in enumerate(detections):
+            class_labels = detection.names
+            boxes = detection.boxes
+            for box in boxes:
+                object_detection_predictions.append(
+                    {
+                        'image_id': i,
+                        'class_id': class_labels[int(box.cls.item())],
+                        'bbox': box.xyxy[0].numpy().round().astype(np.int32).tolist()
+                    }
+                )
+        return object_detection_predictions
 
     def get_yolo_nas_postprocessing():
         print("Fetching yolo nas postprocessing")
