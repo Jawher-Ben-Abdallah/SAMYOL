@@ -47,7 +47,7 @@ class YOLOPostProcessing():
             box /= ratio
             object_detection_predictions.append(
                 {
-                    'image_id': batch_id,
+                    'image_id': int(batch_id),
                     'class_id': int(cls_id),
                     'score': score,
                     'bbox': box.round().astype(np.int32).tolist()
@@ -59,15 +59,14 @@ class YOLOPostProcessing():
     def get_yolo_8_postprocessing(detections):
         object_detection_predictions = []
         for i, detection in enumerate(detections):
-
-            class_labels = detection.names
-            boxes = detection.boxes
+            class_names = detection.class_names
+            boxes = detection.boxes 
 
             for box in boxes:
                 object_detection_predictions.append(
                     {
                         'image_id': i,
-                        'class_id': class_labels[int(box.cls.item())],
+                        'class_id': class_names[int(box.cls.item())],
                         'score': box.conf.item(),
                         'bbox': box.xyxy[0].numpy().round().astype(np.int32).tolist()
                     }
