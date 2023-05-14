@@ -1,39 +1,12 @@
 import cv2
 import numpy as np
-from ultralytics import YOLO
+import onnxruntime as ort
 
 
-def run_object_detection_inference(weights_path, image):
-    model = YOLO(weights_path)
-    detections = model.predict(
-        image, 
-        conf=0.35, 
-        iou=0.65, 
-        verbose=False
-        )
-    return detections
-
-
-def run_object_detection_postprocess(detections):
-    object_detection_predictions = []
-    for i, detection in enumerate(detections):
-        class_labels = detection.names
-        boxes = detection.boxes
-        for box in boxes:
-            object_detection_predictions.append(
-                {
-                    'image_id': i,
-                    'class_id': class_labels[int(box.cls.item())],
-                    'bbox': box.xyxy[0].numpy().round().astype(np.int32).tolist()
-                }
-            )
-    return object_detection_predictions
-
-
-def get_postprocessed_detections(weights_path, image):
-    detections = run_object_detection_inference(weights_path, image)
-    detections = run_object_detection_postprocess(detections)
-    return detections
+def load_image(image_path):
+    image = cv2.imread(image_path)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    return image
 
 
 def letterbox(im, new_shape=(640, 640), color=(114, 114, 114), auto=True, scaleup=True, stride=32):
@@ -63,3 +36,29 @@ def letterbox(im, new_shape=(640, 640), color=(114, 114, 114), auto=True, scaleu
     left, right = int(round(dw - 0.1)), int(round(dw + 0.1))
     im = cv2.copyMakeBorder(im, top, bottom, left, right, cv2.BORDER_CONSTANT, value=color)  # add border
     return im, r, (dw, dh)
+
+
+def generic_yolo_preprocessing(inputs):
+    resize_data = []
+    origin_RGB = []
+    for image_path in inputs:
+        image = load_image(image_path)
+        origin_RGB.append(image)
+        image, ratio, dwdh = letterbox(image, auto=False)
+        image = image.transpose((2, 0, 1))
+        image = np.expand_dims(image, 0)
+        image = np.ascontiguousarray(image)
+        image = image.astype(np.float32)
+        image /= 255
+        resize_data.append((image, ratio, dwdh))
+    np_batch = np.concatenate([data[0] for data in resize_data])
+    return np_batch, resize_data, origin_RGB
+
+
+def generic_ort_inference(model_path, inputs):
+        providers = ["CPUExecutionProvider"]
+        session = ort.InferenceSession(model_path, providers=providers)
+        outname = [i.name for i in session.get_outputs()]
+        inname = [i.name for i in session.get_inputs()]
+        detections = session.run(outname,{inname[0]: inputs})
+        return detections

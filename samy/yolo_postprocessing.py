@@ -1,10 +1,11 @@
 import numpy as np
-from utils.yolo_utils import letterbox
+from .utils import letterbox
 
 
 class YOLOPostProcessing():
 
-    def get_yolo_6_postprocessing(self, outputs):
+    @staticmethod
+    def get_yolo_6_postprocessing(outputs):
         object_detection_predictions = []
         detections, rezise_data, origin_RGB = outputs
         for i in range(detections[0].shape[0]):
@@ -35,7 +36,7 @@ class YOLOPostProcessing():
         return object_detection_predictions
 
 
-    def get_yolo_7_postprocessing(self, img, detections): #img=cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    def get_yolo_7_postprocessing(img, detections): #img=cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         object_detection_predictions = []
         image = img.copy()
         image, ratio, dwdh = letterbox(image, auto=False)
@@ -55,7 +56,7 @@ class YOLOPostProcessing():
         return object_detection_predictions
     
     
-    def get_yolo_8_postprocessing(self, detections):
+    def get_yolo_8_postprocessing(detections):
         object_detection_predictions = []
         for i, detection in enumerate(detections):
 
@@ -74,7 +75,7 @@ class YOLOPostProcessing():
         return object_detection_predictions
 
 
-    def get_yolo_nas_postprocessing(self, detections):
+    def get_yolo_nas_postprocessing(detections):
         object_detection_predictions = []
         for i, detection in enumerate(detections):
             class_names = detection.class_names
