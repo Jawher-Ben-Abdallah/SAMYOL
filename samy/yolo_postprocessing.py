@@ -1,31 +1,49 @@
-import cv2
 import numpy as np
-from PIL import Image
-from utils import letterbox
-
-
+from utils.yolo_utils import letterbox
 
 
 class YOLOPostProcessing():
-    def __init__(self) -> None:
-        print("Did a bunch of stuff")
 
-    def get_yolo_6_postprocessing():
-        print("Fetching yolo 6 postprocessing")
-    
-    def get_yolo_7_postprocessing(img, detections): #img=cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    def get_yolo_6_postprocessing(self, outputs):
+        object_detection_predictions = []
+        detections, rezise_data, origin_RGB = outputs
+        for i in range(detections[0].shape[0]):
+            obj_num = detections[0][i]
+            boxes = detections[1][i]
+            scores = detections[2][i]
+            cls_id = detections[3][i]
+            image = origin_RGB[i]
+            img_h, img_w = image.shape[:2]
+            ratio, dwdh = rezise_data[i][1:]
+            for num in range(obj_num[0]):
+                box = boxes[num]
+                score = round(float(scores[num]), 3)
+                class_id = int(cls_id[num])
+                box -= np.array(dwdh*2)
+                box /= ratio
+                box = box.round().astype(np.int32).tolist()
+                x1 = max(0, box[0])
+                y1 = max(0, box[1])
+                x2 = min(img_w, box[2])
+                y2 = min(img_h, box[3])
+                object_detection_predictions.append({
+                    'image_id': i,
+                    'class_id': class_id,
+                    'score': score,
+                    'bbox': [x1, y1, x2, y2]
+                })
+        return object_detection_predictions
+
+
+    def get_yolo_7_postprocessing(self, img, detections): #img=cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        object_detection_predictions = []
         image = img.copy()
         image, ratio, dwdh = letterbox(image, auto=False)
-
-        object_detection_predictions = []
-
-        for i,(batch_id ,x0,y0,x1,y1,cls_id,score) in enumerate(detections):
+        for i,(batch_id, x0, y0, x1, y1, cls_id, score) in enumerate(detections):
             score = round(float(score),3)
-
             box = np.array([x0,y0,x1,y1])
             box -= np.array(dwdh*2)
             box /= ratio
-            
             object_detection_predictions.append(
                 {
                     'image_id': batch_id,
@@ -34,11 +52,10 @@ class YOLOPostProcessing():
                     'bbox': box.round().astype(np.int32).tolist()
                 }
             )
-
         return object_detection_predictions
     
     
-    def get_yolo_8_postprocessing(detections):
+    def get_yolo_8_postprocessing(self, detections):
         object_detection_predictions = []
         for i, detection in enumerate(detections):
 
@@ -57,7 +74,7 @@ class YOLOPostProcessing():
         return object_detection_predictions
 
 
-    def get_yolo_nas_postprocessing(detections):
+    def get_yolo_nas_postprocessing(self, detections):
         object_detection_predictions = []
         for i, detection in enumerate(detections):
             class_names = detection.class_names
