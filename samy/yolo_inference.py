@@ -1,5 +1,5 @@
 import subprocess
-from utils import letterbox, generic_ort_inference
+from utils import generic_ort_inference
 import onnxruntime as ort
 from super_gradients.training import models
 
@@ -46,5 +46,3 @@ class YOLOInference():
         )
         detections = model.predict(inputs)
         return detections
-    
-

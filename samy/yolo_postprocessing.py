@@ -1,5 +1,3 @@
-import cv2
-from PIL import Image
 import numpy as np
 from utils import letterbox
 
@@ -39,7 +37,7 @@ class YOLOPostProcessing():
 
 
     
-    def get_yolo_7_postprocessing(img, detections, class_labels): #img=cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    def get_yolo_7_postprocessing(img, detections): #img=cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         image = img.copy()
         object_detection_predictions = []
         image, ratio, dwdh = letterbox(image, auto=False)

@@ -135,5 +135,4 @@ checkpoints/
 *.pth
 
 # Miscs
-main.py
 /HRPlanes
