@@ -1,5 +1,5 @@
 import numpy as np
-from utils import letterbox
+from .utils import letterbox
 
 
 class YOLOPostProcessing():
