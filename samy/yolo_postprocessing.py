@@ -1,5 +1,7 @@
+import cv2
+from PIL import Image
 import numpy as np
-from .utils import letterbox
+from utils import letterbox
 
 
 class YOLOPostProcessing():
@@ -36,10 +38,12 @@ class YOLOPostProcessing():
         return object_detection_predictions
 
 
-    def get_yolo_7_postprocessing(img, detections): #img=cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        object_detection_predictions = []
+    
+    def get_yolo_7_postprocessing(img, detections, class_labels): #img=cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         image = img.copy()
+        object_detection_predictions = []
         image, ratio, dwdh = letterbox(image, auto=False)
+        
         for i,(batch_id, x0, y0, x1, y1, cls_id, score) in enumerate(detections):
             score = round(float(score),3)
             box = np.array([x0,y0,x1,y1])
@@ -56,10 +60,10 @@ class YOLOPostProcessing():
         return object_detection_predictions
     
     
-    def get_yolo_8_postprocessing(detections):
+    def get_yolo_8_postprocessing(self, detections):
         object_detection_predictions = []
         for i, detection in enumerate(detections):
-            class_names = detection.class_names
+            class_names = detection.names
             boxes = detection.boxes 
 
             for box in boxes:
@@ -74,7 +78,7 @@ class YOLOPostProcessing():
         return object_detection_predictions
 
 
-    def get_yolo_nas_postprocessing(detections):
+    def get_yolo_nas_postprocessing(self, detections):
         object_detection_predictions = []
         for i, detection in enumerate(detections):
             class_names = detection.class_names
