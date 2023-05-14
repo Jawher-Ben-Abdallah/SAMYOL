@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 from PIL import Image
-from utils import letterbox
+import utils 
 
 
 
@@ -10,12 +10,12 @@ class YOLOPostProcessing():
     def __init__(self) -> None:
         print("Did a bunch of stuff")
 
-    def get_yolo_6_postprocessing():
+    def get_yolo_6_postprocessing(self):
         print("Fetching yolo 6 postprocessing")
     
-    def get_yolo_7_postprocessing(img, detections, class_labels): #img=cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    def get_yolo_7_postprocessing(self, img, detections, class_labels): #img=cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         image = img.copy()
-        image, ratio, dwdh = letterbox(image, auto=False)
+        image, ratio, dwdh = utils.letterbox(image, auto=False)
 
         object_detection_predictions = []
 
@@ -38,10 +38,10 @@ class YOLOPostProcessing():
         return object_detection_predictions
     
     
-    def get_yolo_8_postprocessing(detections):
+    def get_yolo_8_postprocessing(self, detections):
         object_detection_predictions = []
         for i, detection in enumerate(detections):
-            class_names = detection.class_names
+            class_names = detection.names
             boxes = detection.boxes 
 
             for box in boxes:
@@ -56,7 +56,7 @@ class YOLOPostProcessing():
         return object_detection_predictions
 
 
-    def get_yolo_nas_postprocessing(detections):
+    def get_yolo_nas_postprocessing(self, detections):
         object_detection_predictions = []
         for i, detection in enumerate(detections):
             class_names = detection.class_names
