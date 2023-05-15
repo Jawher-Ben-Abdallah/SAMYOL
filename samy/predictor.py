@@ -4,15 +4,13 @@ from samy.yolo_postprocessing import YOLOPostProcessing
 
 
 class SAMY():
-    def __init__(self, inputs, model_path, version):
-        self.inputs = inputs
-        self.model_path = model_path
-        self.version = version
+    def __init__(self):
+        pass
 
-    def predict(self):
-        yolo_pipeline = self.get_yolo_pipeline(self.version)
-        preprocessed_data = yolo_pipeline['preprocessing'](self.inputs)
-        outputs = yolo_pipeline['inference'](self.model_path, preprocessed_data)
+    def predict(self, inputs, version, model_path):
+        yolo_pipeline = self.get_yolo_pipeline(version)
+        preprocessed_data = yolo_pipeline['preprocessing'](inputs)
+        outputs = yolo_pipeline['inference'](model_path, preprocessed_data)
         obj_det_predictions = yolo_pipeline['postprocessing'](outputs)
         return obj_det_predictions
 
