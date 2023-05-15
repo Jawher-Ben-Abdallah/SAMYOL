@@ -41,11 +41,12 @@ class YOLOInference():
     
     @staticmethod
     def get_yolo_nas_inference(inputs, model_type, model_path, classes):
-        # TODO: Change this block to automatically download the package in case it is not available
+        
         try:
             from super_gradients.training import models
         except ImportError:
-            raise ImportError("super-gradients package required.")
+            print('Installing super-gradients ...')
+            subprocess.check_call(["python", '-m', 'pip', 'install', 'super-gradients'])
         
         model = models.get(
             model_type,
