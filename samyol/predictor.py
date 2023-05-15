@@ -1,11 +1,11 @@
-from samy.yolo_preprocessing import YOLOPreProcessing
-from samy.yolo_inference import YOLOInference
-from samy.yolo_postprocessing import YOLOPostProcessing
-
+from samyol.yolo_preprocessing import YOLOPreProcessing
+from samyol.yolo_inference import YOLOInference
+from samyol.yolo_postprocessing import YOLOPostProcessing
+from .utils import load_image
 
 class SAMY():
-    def __init__(self, inputs, model_path, version):
-        self.inputs = inputs
+    def __init__(self, input_path, model_path, version):
+        self.inputs = load_image(input_path)
         self.model_path = model_path
         self.version = version
 
