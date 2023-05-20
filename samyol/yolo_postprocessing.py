@@ -1,11 +1,20 @@
 import numpy as np
 from .utils import letterbox
-
+from typing import List
 
 class YOLOPostProcessing():
 
     @staticmethod
-    def get_yolo_6_postprocessing(outputs):
+    def get_yolo_6_postprocessing(outputs) -> List[dict]:
+        """
+        Perform YOLOv6 post-processing on the outputs.
+
+        Args:
+            outputs: Output data from the YOLOv6 model.
+
+        Returns:
+            List[dict]: List of object detection predictions.
+        """
         object_detection_predictions = []
         detections, rezise_data, origin_RGB = outputs
         for i in range(detections[0].shape[0]):
@@ -37,7 +46,16 @@ class YOLOPostProcessing():
 
 
     @staticmethod
-    def get_yolo_7_postprocessing(outputs): 
+    def get_yolo_7_postprocessing(outputs) -> List[dict]:
+        """
+        Perform YOLOv7 post-processing on the outputs.
+
+        Args:
+            outputs: Output data from the YOLOv7 model.
+
+        Returns:
+            List[dict]: List of object detection predictions.
+        """
         object_detection_predictions = []
         detections, rezise_data, origin_RGB = outputs
         for i in range(detections[0].shape[0]):
@@ -64,11 +82,21 @@ class YOLOPostProcessing():
                     'class_id': class_id,
                     'score': score,
                     'bbox': [x1, y1, x2, y2]
-                })
+                    }
+                )
         return object_detection_predictions
     
     @staticmethod
-    def get_yolo_8_postprocessing(detections):
+    def get_yolo_8_postprocessing(detections) -> List[dict]:
+        """
+        Perform YOLOv8 post-processing on the detections.
+
+        Args:
+            detections: Detections from the YOLOv8 model.
+
+        Returns:
+            List[dict]: List of object detection predictions.
+        """
         object_detection_predictions = []
         for i, detection in enumerate(detections[0]):
             class_names = detection.names
@@ -87,7 +115,16 @@ class YOLOPostProcessing():
 
 
     @staticmethod
-    def get_yolo_nas_postprocessing(detections):
+    def get_yolo_nas_postprocessing(detections) -> List[dict]:
+        """
+        Perform YOLO-NAS post-processing on the detections.
+
+        Args:
+            detections: Detections from the YOLO-NAS model.
+
+        Returns:
+            List[dict]: List of object detection predictions.
+        """
         object_detection_predictions = []
         for i, detection in enumerate(detections):
             class_names = detection.class_names

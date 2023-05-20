@@ -1,15 +1,39 @@
 from samyol.yolo_preprocessing import YOLOPreProcessing
 from samyol.yolo_inference import YOLOInference
 from samyol.yolo_postprocessing import YOLOPostProcessing
+from typing import Union, List, Optional, Dict
 
-class SAMYOL():
-    def __init__(self, input_paths, model_path, version, extra_args=None):
+class SAMYOL():   
+    def __init__(
+        self,
+        input_paths: Union[str, List[str]],
+        model_path: str,
+        version: str,
+        extra_args: Optional[Dict] = None
+    ) -> None:
+        """
+        Initialize the SAMYOL object.
+
+        Args:
+            input_paths (Union[str, List[str]]): Path(s) to the input images.
+            model_path (str): Path to the YOLO model.
+            version (str): Version of the YOLO model to use.
+            extra_args (Dict, optional): Extra arguments to be passed to the YOLO-NAS inference step. Defaults to None.
+        """
+
         self.input_paths = input_paths
         self.model_path = model_path
         self.version = version
         self.kwargs = extra_args if extra_args is not None else {}
 
-    def predict(self):
+    def predict(self) -> List:
+        """
+        Run the YOLO-based object detection pipeline and obtain object detection predictions.
+
+        Returns:
+            list: Object detection predictions.
+        """
+
         yolo_pipeline = self.get_yolo_pipeline(self.version)
         preprocessed_data = yolo_pipeline['preprocessing'](self.input_paths)
         outputs = yolo_pipeline['inference'](self.model_path, preprocessed_data, **self.kwargs)
@@ -17,7 +41,18 @@ class SAMYOL():
         return obj_det_predictions
     
     @staticmethod
-    def get_yolo_pipeline(version):
+    def get_yolo_pipeline(version: str) -> Dict:
+
+        """
+        Get the YOLO pipeline components based on the specified version.
+
+        Args:
+            version (str): Version of the YOLO model.
+
+        Returns:
+            dict: Dictionary containing the YOLO pipeline components.
+        """
+
         run_yolo_preprocessing = getattr(YOLOPreProcessing, f"get_yolo_{version}_preprocessing")
         run_yolo_inference = getattr(YOLOInference, f"get_yolo_{version}_inference")
         run_yolo_postprocessing = getattr(YOLOPostProcessing, f"get_yolo_{version}_postprocessing")

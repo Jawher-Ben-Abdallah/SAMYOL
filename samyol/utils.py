@@ -1,15 +1,46 @@
 import cv2
 import numpy as np
 import onnxruntime as ort
+from typing import List, Tuple
 
 
-def load_image(image_path):
+def load_image(image_path: str) -> np.ndarray:
+    """
+    Load an image from the given path and convert it to a NumPy array.
+
+    Args:
+        image_path (str): Path to the image file.
+
+    Returns:
+        np.ndarray: The loaded image as a NumPy array.
+    """
     image = cv2.imread(image_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     return image
 
+def letterbox(
+        im: np.ndarray, 
+        new_shape: Tuple[int, int] =(640, 640), 
+        color: Tuple[int, int, int]=(114, 114,  114), 
+        auto: bool=True, 
+        scaleup: bool=True, 
+        stride: int=32
+        ) -> Tuple[np.ndarray, float, Tuple[float, float]]:
+    """
+    Resize and pad the image while meeting stride-multiple constraints.
 
-def letterbox(im, new_shape=(640, 640), color=(114, 114, 114), auto=True, scaleup=True, stride=32):
+    Args:
+        im (np.ndarray): Input image as a NumPy array.
+        new_shape (Tuple[int, int]): Desired new shape of the image (height, width).
+        color (Tuple[int, int, int]): RGB color value for the padding.
+        auto (bool): Flag indicating whether to use the minimum rectangle for padding.
+        scaleup (bool): Flag indicating whether to scale up the image if needed.
+        stride (int): Stride value for meeting the stride-multiple constraints.
+
+    Returns:
+        Tuple[np.ndarray, float, Tuple[float, float]]: Resized and padded image, scale ratio, and padding values.
+    """
+
     # Resize and pad image while meeting stride-multiple constraints
     shape = im.shape[:2]  # current shape [height, width]
     if isinstance(new_shape, int):
@@ -38,13 +69,23 @@ def letterbox(im, new_shape=(640, 640), color=(114, 114, 114), auto=True, scaleu
     return im, r, (dw, dh)
 
 
-def generic_yolo_preprocessing(inputs):
+def generic_yolo_preprocessing(
+        inputs: List[str]
+        ) -> Tuple[np.ndarray, List[Tuple[np.ndarray, float, Tuple[float, float]]], List[np.ndarray]]:
+    """
+    Perform generic YOLO preprocessing on a list of input images.
+
+    Args:
+        inputs (List[str]): List of input image paths.
+
+    Returns:
+        Tuple[np.ndarray, List[Tuple[np.ndarray, float, Tuple[float, float]]], List[np.ndarray]]: Preprocessed data, including the batch of resized images, ratio and padding information for each image, and the original RGB images.
+    """
     resize_data = []
     origin_RGB = []
     for image_path in inputs:
         image = load_image(image_path)
         origin_RGB.append(image)
-
         image, ratio, dwdh = letterbox(image, auto=False)
         image = image.transpose((2, 0, 1))
         image = np.expand_dims(image, 0)
@@ -56,10 +97,25 @@ def generic_yolo_preprocessing(inputs):
     return np_batch, resize_data, origin_RGB
 
 
-def generic_ort_inference(model_path, inputs, cuda=True):
-        providers = ['CUDAExecutionProvider'] if cuda else ['CPUExecutionProvider']
-        session = ort.InferenceSession(model_path, providers=providers)
-        outname = [i.name for i in session.get_outputs()]
-        inname = [i.name for i in session.get_inputs()]
-        detections = session.run(outname,{inname[0]: inputs})
-        return detections[0]
+def generic_ort_inference(
+        model_path: str, 
+        inputs: np.ndarray, 
+        cuda: bool = True
+        ) -> np.ndarray:
+    """
+    Perform inference using the ONNX model with ONNX Runtime.
+
+    Args:
+        model_path (str): Path to the ONNX model file.
+        inputs (np.ndarray): Input data for the model as a NumPy array.
+        cuda (bool): Flag indicating whether to use CUDA for inference (default: True).
+
+    Returns:
+        np.ndarray: Inference results as a NumPy array.
+    """
+    providers = ['CUDAExecutionProvider'] if cuda else ['CPUExecutionProvider']
+    session = ort.InferenceSession(model_path, providers=providers)
+    outname = [i.name for i in session.get_outputs()]
+    inname = [i.name for i in session.get_inputs()]
+    detections = session.run(outname,{inname[0]: inputs})
+    return detections
