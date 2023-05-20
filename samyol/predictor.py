@@ -5,10 +5,13 @@ from .utils import load_image
 
 
 class SAMYOL():
-    def __init__(self, input_path, model_path, version):
-        self.inputs = load_image(input_path)
+    def __init__(self, input_paths, model_path, version):
+        self.input_paths = input_paths
         self.model_path = model_path
         self.version = version
+
+    def load_images(self):
+        return [load_image(image_path) for image_path in self.input_paths]
 
     def predict(self):
         yolo_pipeline = self.get_yolo_pipeline(self.version)
