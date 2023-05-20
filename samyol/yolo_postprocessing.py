@@ -58,10 +58,9 @@ class YOLOPostProcessing():
     @staticmethod
     def get_yolo_8_postprocessing(detections):
         object_detection_predictions = []
-        for i, detection in enumerate(detections[0]):
-            class_names = detection.names
-            boxes = detection.boxes 
-
+        for i, detection in enumerate(detections):
+            class_names = detection[0].names
+            boxes = detection[0].boxes
             for box in boxes:
                 object_detection_predictions.append(
                     {
