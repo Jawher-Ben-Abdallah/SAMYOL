@@ -13,7 +13,7 @@ class SAMYOL():
     def predict(self, extra_args=None):
         yolo_pipeline = self.get_yolo_pipeline(self.version)
         preprocessed_data = yolo_pipeline['preprocessing'](self.inputs)
-        outputs = yolo_pipeline['inference'](preprocessed_data, self.model_path, **extra_args)
+        outputs = yolo_pipeline['inference'](self.model_path, preprocessed_data, **extra_args)
         obj_det_predictions = yolo_pipeline['postprocessing'](outputs)
         return obj_det_predictions
     

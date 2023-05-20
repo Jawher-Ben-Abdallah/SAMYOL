@@ -40,7 +40,7 @@ class YOLOInference():
 
     
     @staticmethod
-    def get_yolo_nas_inference(inputs, model_path, model_type, num_classes):
+    def get_yolo_nas_inference(model_path, inputs, model_type, num_classes):
         
         try:
             from super_gradients.training import models
