@@ -26,3 +26,7 @@ class YOLOPreProcessing():
     
     def get_yolo_8_preprocessing(image):
         return image
+    
+    @staticmethod
+    def get_yolo_nas_preprocessing(inputs):
+        return inputs

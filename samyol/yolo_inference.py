@@ -40,7 +40,7 @@ class YOLOInference():
 
     
     @staticmethod
-    def get_yolo_nas_inference(inputs, model_type, model_path, classes):
+    def get_yolo_nas_inference(inputs, model_path, model_type, num_classes):
         
         try:
             from super_gradients.training import models
@@ -50,7 +50,7 @@ class YOLOInference():
         
         model = models.get(
             model_type,
-            num_classes=len(classes),
+            num_classes=num_classes,
             checkpoint_path=model_path
         )
         detections = model.predict(inputs)

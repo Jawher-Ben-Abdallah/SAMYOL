@@ -76,7 +76,8 @@ class YOLOPostProcessing():
         return object_detection_predictions
 
 
-    def get_yolo_nas_postprocessing(self, detections):
+    @staticmethod
+    def get_yolo_nas_postprocessing(detections):
         object_detection_predictions = []
         for i, detection in enumerate(detections):
             class_names = detection.class_names
