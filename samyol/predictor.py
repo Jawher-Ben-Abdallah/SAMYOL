@@ -5,15 +5,16 @@ from .utils import load_image
 
 
 class SAMYOL():
-    def __init__(self, input_paths, model_path, version):
+    def __init__(self, input_paths, model_path, version, extra_args=None):
         self.input_paths = input_paths
         self.model_path = model_path
         self.version = version
+        self.kwargs = extra_args if extra_args is not None else {}
 
-    def predict(self, extra_args=None):
+    def predict(self):
         yolo_pipeline = self.get_yolo_pipeline(self.version)
         preprocessed_data = yolo_pipeline['preprocessing'](self.input_paths)
-        outputs = yolo_pipeline['inference'](self.model_path, preprocessed_data, **extra_args)
+        outputs = yolo_pipeline['inference'](self.model_path, preprocessed_data, **self.kwargs)
         obj_det_predictions = yolo_pipeline['postprocessing'](outputs)
         return obj_det_predictions
     
