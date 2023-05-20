@@ -40,7 +40,11 @@ def letterbox(im, new_shape=(640, 640), color=(114, 114, 114), auto=True, scaleu
 
 def generic_yolo_preprocessing(inputs):
     resize_data = []
-    for image in inputs:
+    origin_RGB = []
+    for image_path in inputs:
+        image = load_image(image_path)
+        origin_RGB.append(image)
+
         image, ratio, dwdh = letterbox(image, auto=False)
         image = image.transpose((2, 0, 1))
         image = np.expand_dims(image, 0)
@@ -49,7 +53,7 @@ def generic_yolo_preprocessing(inputs):
         image /= 255
         resize_data.append((image, ratio, dwdh))
     np_batch = np.concatenate([data[0] for data in resize_data])
-    return np_batch, resize_data, inputs
+    return np_batch, resize_data, origin_RGB
 
 
 def generic_ort_inference(model_path, inputs, cuda=True):

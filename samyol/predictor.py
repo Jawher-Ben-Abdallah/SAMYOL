@@ -9,12 +9,11 @@ class SAMYOL():
         self.input_paths = input_paths
         self.model_path = model_path
         self.version = version
-        self.inputs = [load_image(image_path) for image_path in self.input_paths]
 
-    def predict(self):
+    def predict(self, extra_args=None):
         yolo_pipeline = self.get_yolo_pipeline(self.version)
-        preprocessed_data = yolo_pipeline['preprocessing'](self.inputs)
-        outputs = yolo_pipeline['inference'](self.model_path, preprocessed_data)
+        preprocessed_data = yolo_pipeline['preprocessing'](self.input_paths)
+        outputs = yolo_pipeline['inference'](self.model_path, preprocessed_data, **extra_args)
         obj_det_predictions = yolo_pipeline['postprocessing'](outputs)
         return obj_det_predictions
     
