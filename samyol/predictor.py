@@ -4,7 +4,7 @@ from samyol.yolo_postprocessing import YOLOPostProcessing
 from .utils import load_image
 
 
-class SAMY():
+class SAMYOL():
     def __init__(self, input_path, model_path, version):
         self.inputs = load_image(input_path)
         self.model_path = model_path

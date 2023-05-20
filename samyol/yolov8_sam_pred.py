@@ -27,14 +27,6 @@ weights_path = 'checkpoints/yolov8s.pt'
 
 
 
-
-
-
-
-
-
-
-
 if __name__ =='__main__':
 
   detections = YOLOInference().run_yolo_8_inference(weights_path, image)
@@ -47,7 +39,12 @@ if __name__ =='__main__':
   print(masks.shape)
   print(scores.shape)
 
-  print('Joujou ya passive aggressive')
+    # inputs = ["./assets/image1.jpg"]
+    # model_path = "./checkpoints/yolov6n.onnx"
+    # version = "6"
+    # samy = SAMY(inputs, model_path, version)
+    # obj_det_preds = samy.predict()
+    # print("DONE.")
 
 
 # plt.imshow(np.array(raw_image))
