@@ -62,4 +62,4 @@ def generic_ort_inference(model_path, inputs, cuda=True):
         outname = [i.name for i in session.get_outputs()]
         inname = [i.name for i in session.get_inputs()]
         detections = session.run(outname,{inname[0]: inputs})
-        return detections[0]
+        return detections

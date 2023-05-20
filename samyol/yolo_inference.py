@@ -1,6 +1,5 @@
 import subprocess
 from .utils import generic_ort_inference
-import onnxruntime as ort
 from .utils import generic_ort_inference
 
 
@@ -8,14 +7,14 @@ class YOLOInference():
 
     @staticmethod
     def get_yolo_6_inference(model_path, inputs):
-        detections = generic_ort_inference(model_path, inputs, cuda=True)
-        resize_data, origin_RGB = inputs[1:]
+        np_batch, resize_data, origin_RGB = inputs
+        detections = generic_ort_inference(model_path, np_batch, cuda=True)
         return detections, resize_data, origin_RGB
     
     @staticmethod
     def get_yolo_7_inference(model_path, inputs):
-        detections = generic_ort_inference(model_path, inputs, cuda=True)
-        resize_data, origin_RGB = inputs[1:]
+        np_batch, resize_data, origin_RGB = inputs
+        detections = generic_ort_inference(model_path, np_batch, cuda=True)
         return detections, resize_data, origin_RGB
 
     @staticmethod
