@@ -9,9 +9,7 @@ class SAMYOL():
         self.input_paths = input_paths
         self.model_path = model_path
         self.version = version
-
-    def load_images(self):
-        return [load_image(image_path) for image_path in self.input_paths]
+        self.inputs = [load_image(image_path) for image_path in self.input_paths]
 
     def predict(self):
         yolo_pipeline = self.get_yolo_pipeline(self.version)
