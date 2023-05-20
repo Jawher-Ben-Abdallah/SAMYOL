@@ -1,17 +1,5 @@
+import subprocess
 from PIL import Image
-from transformers import SamModel, SamProcessor
-
-
-##############################################################
-
-# Transformers installation
-#! pip install transformers datasets
-# To install from source instead of the last release, comment the command above and uncomment the following one.
-# ! pip install git+https://github.com/huggingface/transformers.git
-
-##############################################################
-
-
 
 
 class HuggingFaceSAMModel :
@@ -22,6 +10,11 @@ class HuggingFaceSAMModel :
         
 
     def load_model (self):
+        try:
+            from transformers import SamModel, SamProcessor
+        except ImportError:
+            print('Installing transformers ...')
+            subprocess.check_call(["python", '-m', 'pip', 'install', 'transformers', 'datasets'])
         sam_model = SamModel.from_pretrained("facebook/sam-vit-huge")
         sam_processor = SamProcessor.from_pretrained("facebook/sam-vit-huge")
         return sam_model, sam_processor

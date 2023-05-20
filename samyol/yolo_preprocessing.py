@@ -23,3 +23,6 @@ class YOLOPreProcessing():
         inp = {inname[0]:im}
 
         return outname, inp
+    
+    def get_yolo_8_preprocessing(image):
+        return image

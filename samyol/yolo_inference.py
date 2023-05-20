@@ -45,7 +45,8 @@ class YOLOInference():
         try:
             from super_gradients.training import models
         except ImportError:
-            raise ImportError("super-gradients package required.")
+            print('Installing super-gradients ...')
+            subprocess.check_call(["python", '-m', 'pip', 'install', 'super-gradients'])
         
         model = models.get(
             model_type,

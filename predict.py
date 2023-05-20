@@ -1,4 +1,4 @@
-import samy
+import samyol
 import argparse
 
 
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     if (not args.yolo_checkpoint):
-        samy.download_model_weights("YOLO")
+        samyol.download_model_weights("YOLO")
         args.yolo_checkpoint = "./checkpoints/yolov8s.pt"
     # if (not args.sam_checkpoint):
     #     yolo_anything.download_model_weights("SAM")
