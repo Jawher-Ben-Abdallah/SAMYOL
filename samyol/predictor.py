@@ -1,8 +1,6 @@
 from samyol.yolo_preprocessing import YOLOPreProcessing
 from samyol.yolo_inference import YOLOInference
 from samyol.yolo_postprocessing import YOLOPostProcessing
-from .utils import load_image
-
 
 class SAMYOL():
     def __init__(self, input_paths, model_path, version, extra_args=None):
