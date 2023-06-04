@@ -1,22 +1,23 @@
 import subprocess
 from PIL import Image
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 import numpy as np
 
-class HuggingFaceSAMModel :
-    def __init__ (self, image_paths: str, obj_det_predictions: List[float]): 
 
+
+class HuggingFaceSAMModel :
+    def __init__ (self, image_paths: List[str], obj_det_predictions: List[Dict]): 
         """
         Initialize the HuggingFaceSAMModel.
 
         Args:
-            image_path (str): Path to the image file.
-            bbox (List[float]): The bounding box coordinates as a list of floats [x1, y1, x2, y2].
+            image_path (List[str]): Path to the image files.
+            bbox List[Dict]): Object detection predictions.
         """
+
         self.image_paths = image_paths
         self.obj_det_predictions = obj_det_predictions
         self.model, self.processor = self.load_model()
-        
 
     def load_model (self):
         """
@@ -34,7 +35,7 @@ class HuggingFaceSAMModel :
         sam_processor = SamProcessor.from_pretrained("facebook/sam-vit-huge")
         return sam_model, sam_processor
 
-    def sam_inference(self, device: str) -> Tuple[List[np.ndarray], List[float]]:
+    def sam_inference(self, device: str) -> List[Dict]:
         """
         Perform inference using the HuggingFace SAM model.
 
@@ -42,8 +43,9 @@ class HuggingFaceSAMModel :
             device (str): The device to run the inference on.
 
         Returns:
-            Tuple[List[np.ndarray], List[float]]: A tuple containing the predicted masks (as a list of NumPy arrays) and the scores (as a list of floats).
+            List[Dict]: Object segmentation predictions as a list of dictionaries.
         """
+
         object_segmentation_predictions = []
 
         self.image_ids = [d['image_id'] for d in self.obj_det_predictions]

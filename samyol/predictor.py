@@ -4,6 +4,8 @@ from samyol.yolo_postprocessing import YOLOPostProcessing
 from typing import Union, List, Optional, Dict, Tuple, Callable
 from samyol.sam_inference import HuggingFaceSAMModel
 import matplotlib.pyplot as plt
+import numpy as np
+import random
 
 class SAMYOL:   
     def __init__(
@@ -24,33 +26,34 @@ class SAMYOL:
             version (str): Version of the YOLO model to use.
             extra_args (Dict, optional): Extra arguments to be passed to the YOLO-NAS inference step. Defaults to None.
         """
+
         self.input_paths = input_paths
         self.model_path = model_path
         self.version = version
         self.kwargs = extra_args if extra_args is not None else {}
         self.device = device
 
-    def predict(self) -> Tuple[List, List]:
+    def predict(self) -> Tuple[List[np.ndarray], List[Dict]]:
         """
-        Run the YOLO-based object detection pipeline and obtain object detection predictions.
+        Run the YOLO-based object detection pipeline followed by SAM and obtain object segmentation predictions.
 
         Returns:
-            Tuple[List, List]: Object detection predictions as a tuple of masks and scores.
+            Tuple[List[np.ndarray], List[Dict]]: A tuple of original RGB images and object segmentation predictions.
         """
         yolo_pipeline = self.get_yolo_pipeline(self.version)
         preprocessed_data = yolo_pipeline['preprocessing'](self.input_paths)
         outputs = yolo_pipeline['inference'](self.model_path, preprocessed_data, **self.kwargs)
         obj_det_predictions = yolo_pipeline['postprocessing'](outputs)
         object_segmentation_predictions = HuggingFaceSAMModel(self.input_paths, obj_det_predictions).sam_inference(self.device)
-        return preprocessed_data, object_segmentation_predictions
+        return preprocessed_data[2], object_segmentation_predictions
     
 
-    def display(self):
+    def display(self) -> None:
         """
         Display the bounding boxes and masks.
         """
-        preprocessed_data, object_segmentation_predictions = self.predict()
-        num_images = len(preprocessed_data)
+        original_RGB, object_segmentation_predictions = self.predict()
+        num_images = len(original_RGB)
 
         # Define the number of rows and columns for the subplots
         num_rows = int(num_images / 3) + (num_images % 3 > 0)  # Adjust the number of columns as per your requirement
@@ -61,38 +64,35 @@ class SAMYOL:
 
 
         # Loop through the data and plot each dictionary
-        for i, d in enumerate(preprocessed_data):
+        for i, d in enumerate(original_RGB):
             row_idx = i // num_cols
             col_idx = i % num_cols
 
-            image = load_image(d['image_id'])  # Load the image (replace with your own method)
+            image = original_RGB[d['image_id']]  
 
             # Plot the image on the corresponding subplot
             axes[row_idx, col_idx].imshow(image)
             axes[row_idx, col_idx].axis('off')
 
+            # Plot the bounding boxes
+            for bbox, class_id in zip(d['bbox'], d['class_id']):
+                x1, y1, x2, y2 = bbox
+                color = random.random(), random.random(), random.random()  # Generate a random color for each class_id
+                rect = plt.Rectangle((x1, y1), x2 - x1, y2 - y1, fill=False, edgecolor=color, linewidth=2)
+                axes[row_idx, col_idx].add_patch(rect)
 
-
-
-
-        # Loop through the images and plot them
-        for i, image in enumerate(preprocessed_data):
-            row_idx = i // num_cols
-            col_idx = i % num_cols
-
-        # Plot it on the corresponding subplot
-        axes[row_idx, col_idx].imshow(image)
-        axes[row_idx, col_idx].axis('off')
+            # Plot the masks with low opacity
+            for mask, class_id in zip(d['masks'], d['class_id']):
+                color = random.random(), random.random(), random.random()  # Generate a random color for each class_id
+                alpha = 0.4  # Set the opacity of the mask
+                masked_image = np.where(mask[:, :, np.newaxis], image * (1 - alpha) + color + alpha, image)
+                axes[row_idx, col_idx].imshow(masked_image)
 
         # Adjust the spacing between subplots
         fig.tight_layout()
 
         # Display the subplots
         plt.show()
-
-
-
-
 
 
     
