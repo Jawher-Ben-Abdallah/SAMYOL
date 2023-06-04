@@ -3,6 +3,7 @@ from samyol.yolo_inference import YOLOInference
 from samyol.yolo_postprocessing import YOLOPostProcessing
 from typing import Union, List, Optional, Dict, Tuple, Callable
 from samyol.sam_inference import HuggingFaceSAMModel
+import matplotlib.pyplot as plt
 
 class SAMYOL:   
     def __init__(
@@ -40,9 +41,48 @@ class SAMYOL:
         preprocessed_data = yolo_pipeline['preprocessing'](self.input_paths)
         outputs = yolo_pipeline['inference'](self.model_path, preprocessed_data, **self.kwargs)
         obj_det_predictions = yolo_pipeline['postprocessing'](outputs)
-        bbox = obj_det_predictions['bbox']
-        masks, scores = HuggingFaceSAMModel(self.input_paths, bbox).sam_inference(self.device)
-        return masks, scores
+
+
+
+
+        masks, scores = HuggingFaceSAMModel(self.input_paths, obj_det_predictions).sam_inference(self.device)
+        return preprocessed_data, masks, bboxes, scores
+    
+
+    def display(self):
+        """
+        Display the bounding boxes and masks.
+        """
+        preprocessed_data, masks, bbox, scores = self.predict()
+        num_images = len(preprocessed_data)
+
+        # Define the number of rows and columns for the subplots
+        num_rows = int(num_images / 3) + (num_images % 3 > 0)  # Adjust the number of columns as per your requirement
+        num_cols = min(num_images, 3)
+
+        # Create subplots with the specified number of rows and columns
+        fig, axes = plt.subplots(num_rows, num_cols, figsize=(12, 4))
+
+        # Loop through the images and plot them
+        for i, image in enumerate(preprocessed_data):
+            row_idx = i // num_cols
+            col_idx = i % num_cols
+
+        # Plot it on the corresponding subplot
+        axes[row_idx, col_idx].imshow(image)
+        axes[row_idx, col_idx].axis('off')
+
+        # Adjust the spacing between subplots
+        fig.tight_layout()
+
+        # Display the subplots
+        plt.show()
+
+
+
+
+
+
     
     @staticmethod
     def get_yolo_pipeline(version: str) -> Dict[str, Callable]:
