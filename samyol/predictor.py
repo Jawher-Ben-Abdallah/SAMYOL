@@ -23,6 +23,8 @@ class SAMYOL:
             version (str): Version of the YOLO model to use.
             extra_args (Dict, optional): Extra arguments to be passed to the YOLO-NAS inference step. Defaults to None.
         """
+        if not isinstance(input_paths, List):
+            input_paths = [input_paths]
         self.input_paths = input_paths
         self.model_path = model_path
         self.version = version
