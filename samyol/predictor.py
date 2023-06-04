@@ -41,19 +41,15 @@ class SAMYOL:
         preprocessed_data = yolo_pipeline['preprocessing'](self.input_paths)
         outputs = yolo_pipeline['inference'](self.model_path, preprocessed_data, **self.kwargs)
         obj_det_predictions = yolo_pipeline['postprocessing'](outputs)
-
-
-
-
-        masks, scores = HuggingFaceSAMModel(self.input_paths, obj_det_predictions).sam_inference(self.device)
-        return preprocessed_data, masks, bboxes, scores
+        object_segmentation_predictions = HuggingFaceSAMModel(self.input_paths, obj_det_predictions).sam_inference(self.device)
+        return preprocessed_data, object_segmentation_predictions
     
 
     def display(self):
         """
         Display the bounding boxes and masks.
         """
-        preprocessed_data, masks, bbox, scores = self.predict()
+        preprocessed_data, object_segmentation_predictions = self.predict()
         num_images = len(preprocessed_data)
 
         # Define the number of rows and columns for the subplots
@@ -62,6 +58,22 @@ class SAMYOL:
 
         # Create subplots with the specified number of rows and columns
         fig, axes = plt.subplots(num_rows, num_cols, figsize=(12, 4))
+
+
+        # Loop through the data and plot each dictionary
+        for i, d in enumerate(preprocessed_data):
+            row_idx = i // num_cols
+            col_idx = i % num_cols
+
+            image = load_image(d['image_id'])  # Load the image (replace with your own method)
+
+            # Plot the image on the corresponding subplot
+            axes[row_idx, col_idx].imshow(image)
+            axes[row_idx, col_idx].axis('off')
+
+
+
+
 
         # Loop through the images and plot them
         for i, image in enumerate(preprocessed_data):
