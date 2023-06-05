@@ -79,14 +79,14 @@ class SAMYOL:
             axes[row_idx, col_idx].axis('off')
 
             # Plot the bounding boxes
-            for bbox, class_id in zip(d['bbox'], d['class_id']):
+            for bbox, class_id in zip(object_segmentation_predictions['bbox'], object_segmentation_predictions['class_id']):
                 x1, y1, x2, y2 = bbox
                 color = random.random(), random.random(), random.random()  # Generate a random color for each class_id
                 rect = plt.Rectangle((x1, y1), x2 - x1, y2 - y1, fill=False, edgecolor=color, linewidth=2)
                 axes[row_idx, col_idx].add_patch(rect)
 
             # Plot the masks with low opacity
-            for mask, class_id in zip(d['masks'], d['class_id']):
+            for mask, class_id in zip(object_segmentation_predictions['masks'], object_segmentation_predictions['class_id']):
                 color = random.random(), random.random(), random.random()  # Generate a random color for each class_id
                 alpha = 0.4  # Set the opacity of the mask
                 masked_image = np.where(mask[:, :, np.newaxis], image * (1 - alpha) + color + alpha, image)
