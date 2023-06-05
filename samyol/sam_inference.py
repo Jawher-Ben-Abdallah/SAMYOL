@@ -1,7 +1,6 @@
 import subprocess
 from PIL import Image
-from typing import List, Tuple, Dict
-import numpy as np
+from typing import List, Dict
 
 
 
@@ -31,8 +30,8 @@ class HuggingFaceSAMModel :
         except ImportError:
             print('Installing transformers ...')
             subprocess.check_call(["python", '-m', 'pip', 'install', 'transformers', 'datasets'])
-        sam_model = SamModel.from_pretrained("facebook/sam-vit-huge")
-        sam_processor = SamProcessor.from_pretrained("facebook/sam-vit-huge")
+        sam_model = SamModel.from_pretrained("facebook/sam-vit-base")
+        sam_processor = SamProcessor.from_pretrained("facebook/sam-vit-base")
         return sam_model, sam_processor
 
     def sam_inference(self, device: str) -> List[Dict]:
