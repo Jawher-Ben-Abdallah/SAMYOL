@@ -56,7 +56,7 @@ class SAMYOL:
         """
         Display the bounding boxes and masks.
         """
-        original_RGB, object_segmentation_predictions = self.predict()
+        original_RGB, object_segmentation_predictions = self.predict(input_paths=["./assets/image1.jpg"])
         num_images = len(original_RGB)
 
         # Define the number of rows and columns for the subplots
@@ -64,11 +64,11 @@ class SAMYOL:
         num_cols = min(num_images, 3)
 
         # Create subplots with the specified number of rows and columns
-        fig, axes = plt.subplots(num_rows, num_cols, figsize=(12, 4))
+        fig, axes = plt.subplots(num_rows, num_cols, figsize=(12, 4), squeeze=False)
 
 
         # Loop through the data and plot each dictionary
-        for i, d in enumerate(original_RGB):
+        for i, d in enumerate(object_segmentation_predictions):
             row_idx = i // num_cols
             col_idx = i % num_cols
 
@@ -79,17 +79,17 @@ class SAMYOL:
             axes[row_idx, col_idx].axis('off')
 
             # Plot the bounding boxes
-            for bbox, class_id in zip(object_segmentation_predictions['bbox'], object_segmentation_predictions['class_id']):
+            for bbox, class_id in zip(d['bbox'], d['class_id']):
                 x1, y1, x2, y2 = bbox
                 color = random.random(), random.random(), random.random()  # Generate a random color for each class_id
                 rect = plt.Rectangle((x1, y1), x2 - x1, y2 - y1, fill=False, edgecolor=color, linewidth=2)
                 axes[row_idx, col_idx].add_patch(rect)
 
             # Plot the masks with low opacity
-            for mask, class_id in zip(object_segmentation_predictions['masks'], object_segmentation_predictions['class_id']):
+            for mask, class_id in zip(d['masks'], d['class_id']):
                 color = random.random(), random.random(), random.random()  # Generate a random color for each class_id
                 alpha = 0.4  # Set the opacity of the mask
-                masked_image = np.where(mask[:, :, np.newaxis], image * (1 - alpha) + color + alpha, image)
+                masked_image = np.where(mask.squeeze().permute(1, 2, 0), image * (1 - alpha) + color + alpha, image)
                 axes[row_idx, col_idx].imshow(masked_image)
 
         # Adjust the spacing between subplots

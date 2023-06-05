@@ -47,9 +47,9 @@ class HuggingFaceSAMModel :
 
         object_segmentation_predictions = []
 
-        self.image_ids = [d['image_id'] for d in self.obj_det_predictions]
+        image_ids = list(set([d['image_id'] for d in self.obj_det_predictions]))
     
-        for image_id in self.image_ids:
+        for image_id in image_ids:
             # Filter the data based on the current image_id
             filtered_data = [d for d in self.obj_det_predictions if d['image_id'] == image_id]
 
@@ -60,10 +60,11 @@ class HuggingFaceSAMModel :
             class_ids = [d['class_id'] for d in filtered_data]
             
             # Load and preprocess the image based on the current image_id
+            # TODO: [SAM-16] use origin_RGB instead.
             image = Image.open(self.image_paths[image_id]).convert("RGB")
 
             # Perform the inference for the current image_id
-            inputs = self.processor(image,  input_boxes=[[bboxes]], return_tensors="pt").to(device)
+            inputs = self.processor(image, input_boxes=[[bboxes]], return_tensors="pt").to(device)
             outputs = self.model(**inputs)
             masks = self.processor.image_processor.post_process_masks(outputs.pred_masks.cpu(), inputs["original_sizes"].cpu(), inputs["reshaped_input_sizes"].cpu())
             
@@ -73,7 +74,7 @@ class HuggingFaceSAMModel :
                     'class_id': class_ids,
                     'score': outputs.iou_scores,
                     'bbox': bboxes,
-                    'masks': masks
+                    'masks': masks[0]
                 })
 
         return object_segmentation_predictions
