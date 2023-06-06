@@ -48,15 +48,15 @@ class SAMYOL:
         preprocessed_data = yolo_pipeline['preprocessing'](input_paths)
         outputs = yolo_pipeline['inference'](self.model_path, preprocessed_data, **self.kwargs)
         obj_det_predictions = yolo_pipeline['postprocessing'](outputs)
-        object_segmentation_predictions = HuggingFaceSAMModel(preprocessed_data[2], obj_det_predictions).sam_inference(self.device)
-        return preprocessed_data[2], object_segmentation_predictions
+        object_segmentation_predictions = HuggingFaceSAMModel(preprocessed_data[-1], obj_det_predictions, self.device).sam_inference()
+        return preprocessed_data[-1], object_segmentation_predictions
     
 
     def display(self) -> None:
         """
         Display the bounding boxes and masks.
         """
-        original_RGB, object_segmentation_predictions = self.predict(input_paths=["./assets/image1.jpg"])
+        original_RGB, object_segmentation_predictions = self.predict(input_paths=["./assets/dog.jpg"])
         num_images = len(original_RGB)
 
         # Define the number of rows and columns for the subplots
@@ -87,7 +87,7 @@ class SAMYOL:
 
             # Plot the masks with low opacity
             for mask, class_id in zip(d['masks'], d['class_id']):
-                color = np.concatenate([np.random.random(3), np.array([0.4])], axis=0)
+                color = np.concatenate([np.random.random(3), np.array([0.6])], axis=0)
                 h, w = mask.shape[-2:]
                 bbox_mask = mask.reshape(h, w, 1) * color.reshape(1, 1, -1)
                 axes[row_idx, col_idx].imshow(bbox_mask)

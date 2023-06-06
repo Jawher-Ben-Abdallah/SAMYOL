@@ -80,15 +80,15 @@ class HuggingFaceSAMModel :
             scores = outputs.iou_scores
 
             # Reshape the tensor to have size (N, 3)
-            reshaped_iou_scores = outputs.iou_scores.squeeze().t()
-            idx_max_iou = torch.argmax(reshaped_iou_scores.view(-1, 3), dim=0).tolist()
+            reshaped_iou_scores = outputs.iou_scores.squeeze()
+            idx_max_iou = torch.argmax(reshaped_iou_scores.view(-1, 3), dim=1).tolist()
               
             object_segmentation_predictions.append({
                     'image_id': image_id,
                     'class_id': class_ids,
-                    'score': [outputs.iou_scores[i, j, ...] for i, j in enumerate (idx_max_iou)],
+                    'score': [outputs.iou_scores.squeeze()[i, j, ...].item() for i, j in enumerate (idx_max_iou)],
                     'bbox': bboxes,
-                    'masks': [masks[i, j, ...] for i, j in enumerate (idx_max_iou)]
+                    'masks': [masks[0][i, j, ...] for i, j in enumerate (idx_max_iou)]
                 })
 
         return object_segmentation_predictions
