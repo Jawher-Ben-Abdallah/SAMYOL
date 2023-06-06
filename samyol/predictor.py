@@ -87,10 +87,10 @@ class SAMYOL:
 
             # Plot the masks with low opacity
             for mask, class_id in zip(d['masks'], d['class_id']):
-                color = random.random(), random.random(), random.random()  # Generate a random color for each class_id
-                alpha = 0.4  # Set the opacity of the mask
-                masked_image = np.where(mask.squeeze().permute(1, 2, 0), image * (1 - alpha) + color + alpha, image)
-                axes[row_idx, col_idx].imshow(masked_image)
+                color = np.concatenate([np.random.random(3), np.array([0.4])], axis=0)
+                h, w = mask.shape[-2:]
+                bbox_mask = mask.reshape(h, w, 1) * color.reshape(1, 1, -1)
+                axes[row_idx, col_idx].imshow(bbox_mask)
 
         # Adjust the spacing between subplots
         fig.tight_layout()
