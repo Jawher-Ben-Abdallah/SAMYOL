@@ -37,10 +37,6 @@ class HuggingFaceSAMModel :
         return sam_model, sam_processor
     
 
-
-
-
-
     def sam_inference(self) -> List[Dict]:
         """
         Perform inference using the HuggingFace SAM model.
