@@ -1,20 +1,19 @@
 import subprocess
-from PIL import Image
 from typing import List, Dict
-
-
+import numpy as np
+import torch
 
 class HuggingFaceSAMModel :
-    def __init__ (self, image_paths: List[str], obj_det_predictions: List[Dict]): 
+    def __init__ (self, original_RGB: List[np.ndarray], obj_det_predictions: List[Dict]): 
         """
         Initialize the HuggingFaceSAMModel.
 
         Args:
-            image_path (List[str]): Path to the image files.
+            original_RGB (List[np.ndarray]): List of RGB images.
             bbox List[Dict]): Object detection predictions.
         """
 
-        self.image_paths = image_paths
+        self.original_RGB = original_RGB
         self.obj_det_predictions = obj_det_predictions
         self.model, self.processor = self.load_model()
 
@@ -59,22 +58,24 @@ class HuggingFaceSAMModel :
             # Extract the bounding boxes for the current image_id
             class_ids = [d['class_id'] for d in filtered_data]
             
-            # Load and preprocess the image based on the current image_id
-            # TODO: [SAM-16] use origin_RGB instead.
-            image = Image.open(self.image_paths[image_id]).convert("RGB")
+            # Get the image based on the current image_id
+            image = self.original_RGB[image_id]
 
             # Perform the inference for the current image_id
             inputs = self.processor(image, input_boxes=[[bboxes]], return_tensors="pt").to(device)
             outputs = self.model(**inputs)
             masks = self.processor.image_processor.post_process_masks(outputs.pred_masks.cpu(), inputs["original_sizes"].cpu(), inputs["reshaped_input_sizes"].cpu())
-            
 
+            # Reshape the tensor to have size (N, 3)
+            reshaped_iou_scores = outputs.iou_scores.squeeze().t()
+            idx_max_iou = torch.argmax(reshaped_iou_scores.view(-1, 3), dim=0).tolist()
+              
             object_segmentation_predictions.append({
                     'image_id': image_id,
                     'class_id': class_ids,
-                    'score': outputs.iou_scores,
+                    'score': [outputs.iou_scores[i, j, ...] for i, j in enumerate (idx_max_iou)],
                     'bbox': bboxes,
-                    'masks': masks[0]
+                    'masks': [masks[i, j, ...] for i, j in enumerate (idx_max_iou)]
                 })
 
         return object_segmentation_predictions

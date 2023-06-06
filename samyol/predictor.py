@@ -48,7 +48,7 @@ class SAMYOL:
         preprocessed_data = yolo_pipeline['preprocessing'](input_paths)
         outputs = yolo_pipeline['inference'](self.model_path, preprocessed_data, **self.kwargs)
         obj_det_predictions = yolo_pipeline['postprocessing'](outputs)
-        object_segmentation_predictions = HuggingFaceSAMModel(input_paths, obj_det_predictions).sam_inference(self.device)
+        object_segmentation_predictions = HuggingFaceSAMModel(preprocessed_data[2], obj_det_predictions).sam_inference(self.device)
         return preprocessed_data[2], object_segmentation_predictions
     
 
