@@ -1,5 +1,7 @@
 from typing import List, Dict
+import torch
 import numpy as np
+import cv2
 import random
 import matplotlib.pyplot as plt
 
@@ -59,5 +61,8 @@ class SAMYOLPredictions():
         # Display the subplots
         plt.show()
 
-    def save(self):
-        ...
+    def save(self, save_dir, filename, image_id=0, format="jpg"):
+        masks = self.predictions[image_id]['masks']
+        masks = torch.logical_or(*masks)
+        masks = masks.numpy().astype(np.uint8)
+        cv2.imwrite(f"{save_dir}/{filename}.{format}", masks * 255)
