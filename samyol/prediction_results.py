@@ -61,8 +61,17 @@ class SAMYOLPredictions():
         # Display the subplots
         plt.show()
 
-    def save(self, save_dir, filename, image_id=0, format="jpg"):
+    def save(self, save_dir="./", filename="default", fuse_masks=False, image_id=0, format="png"):
         masks = self.predictions[image_id]['masks']
-        masks = torch.logical_or(*masks)
-        masks = masks.numpy().astype(np.uint8)
-        cv2.imwrite(f"{save_dir}/{filename}.{format}", masks * 255)
+        if fuse_masks:
+            # Merge all masks
+            masks = torch.logical_or(*masks)
+            masks = masks.numpy().astype(np.uint8)
+            cv2.imwrite(f"{save_dir}/{filename}.{format}", masks * 255)
+        else:
+            # Per Mask
+            class_ids = self.predictions[image_id]['class_id']
+            masks = [mask * (class_id + 1) for (mask, class_id) in zip (masks, class_ids)]
+            masks = torch.stack(masks, dim=-1)
+            masks = masks.numpy().astype(np.uint8)
+            cv2.imwrite(f"{save_dir}/{filename}.{format}", masks)
