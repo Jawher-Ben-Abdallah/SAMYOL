@@ -60,7 +60,7 @@ class YOLOInference():
         
         model = YOLO(model_path)
         detections = []
-        for image in inputs:
+        for image in inputs[0]:
             detections.append(
                 model.predict(
                     image, 
