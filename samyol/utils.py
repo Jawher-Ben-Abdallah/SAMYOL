@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-# import onnxruntime as ort
+import onnxruntime as ort
 from typing import List, Tuple
 
 
@@ -100,7 +100,7 @@ def generic_yolo_preprocessing(
 def generic_ort_inference(
         model_path: str, 
         inputs: np.ndarray, 
-        cuda: bool = True
+        cuda: bool = False
         ) -> np.ndarray:
     """
     Perform inference using the ONNX model with ONNX Runtime.
