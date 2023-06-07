@@ -1,6 +1,7 @@
 from samyol.yolo_preprocessing import YOLOPreProcessing
 from samyol.yolo_inference import YOLOInference
 from samyol.yolo_postprocessing import YOLOPostProcessing
+from samyol.prediction_results import SAMYOLPredictions
 from typing import Union, List, Optional, Dict, Tuple, Callable
 from samyol.sam_inference import HuggingFaceSAMModel
 import matplotlib.pyplot as plt
@@ -13,6 +14,7 @@ class SAMYOL:
         model_path: str,
         device: str,
         version: str,
+        class_labels: List[str],
         extra_args: Optional[Dict] = None
     ) -> None:
         """
@@ -22,10 +24,12 @@ class SAMYOL:
             model_path (str): Path to the YOLO model.
             device (str): Device to use for inference.
             version (str): Version of the YOLO model to use.
+            class_labels (List[str]): List of class labels.
             extra_args (Dict, optional): Extra arguments to be passed to the YOLO-NAS inference step. Defaults to None.
         """
         self.model_path = model_path
         self.version = version
+        self.class_labels = class_labels
         self.kwargs = extra_args if extra_args is not None else {}
         self.device = device
 
@@ -49,7 +53,11 @@ class SAMYOL:
         outputs = yolo_pipeline['inference'](self.model_path, preprocessed_data, **self.kwargs)
         obj_det_predictions = yolo_pipeline['postprocessing'](outputs)
         object_segmentation_predictions = HuggingFaceSAMModel(input_paths, obj_det_predictions).sam_inference(self.device)
-        return preprocessed_data[2], object_segmentation_predictions
+        return SAMYOLPredictions(
+            images=preprocessed_data[2], 
+            predictions=object_segmentation_predictions,
+            class_labels=self.class_labels
+        )
     
 
     def display(self) -> None:
