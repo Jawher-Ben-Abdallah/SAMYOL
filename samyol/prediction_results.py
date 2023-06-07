@@ -65,8 +65,8 @@ class SAMYOLPredictions():
         masks = self.predictions[image_id]['masks']
         if fuse_masks:
             # Merge all masks
-            masks = torch.logical_or(*masks)
-            masks = masks.numpy().astype(np.uint8)
+            masks = [mask.numpy() for mask in masks]
+            masks = np.logical_or.reduce(np.array(masks))
             cv2.imwrite(f"{save_dir}/{filename}.{format}", masks * 255)
         else:
             # Per Mask
