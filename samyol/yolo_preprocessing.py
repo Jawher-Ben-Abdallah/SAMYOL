@@ -1,4 +1,4 @@
-from .utils import generic_yolo_preprocessing
+from .utils import generic_yolo_preprocessing, load_image
 from typing import List, Tuple, Union
 import numpy as np
 class YOLOPreProcessing():
@@ -46,7 +46,9 @@ class YOLOPreProcessing():
         Returns:
             inputs (Union[List[str], List[np.ndarray]]): List of input image paths or list of input images.
         """
-        return inputs
+        origin_RGB = [load_image(image_path) for image_path in inputs]
+
+        return [origin_RGB]
     
     @staticmethod
     def get_yolo_nas_preprocessing(

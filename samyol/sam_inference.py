@@ -1,20 +1,22 @@
 import subprocess
-from PIL import Image
 from typing import List, Dict
-
-
+import numpy as np
+import torch
 
 class HuggingFaceSAMModel :
-    def __init__ (self, image_paths: List[str], obj_det_predictions: List[Dict]): 
+    def __init__ (self, 
+                  original_RGB: List[np.ndarray], 
+                  obj_det_predictions: List[Dict], 
+                  device: str): 
         """
         Initialize the HuggingFaceSAMModel.
 
         Args:
-            image_path (List[str]): Path to the image files.
+            original_RGB (List[np.ndarray]): List of RGB images.
             bbox List[Dict]): Object detection predictions.
         """
-
-        self.image_paths = image_paths
+        self.device = device
+        self.original_RGB = original_RGB
         self.obj_det_predictions = obj_det_predictions
         self.model, self.processor = self.load_model()
 
@@ -30,11 +32,12 @@ class HuggingFaceSAMModel :
         except ImportError:
             print('Installing transformers ...')
             subprocess.check_call(["python", '-m', 'pip', 'install', 'transformers', 'datasets'])
-        sam_model = SamModel.from_pretrained("facebook/sam-vit-base")
+        sam_model = SamModel.from_pretrained("facebook/sam-vit-base").to(self.device)
         sam_processor = SamProcessor.from_pretrained("facebook/sam-vit-base")
         return sam_model, sam_processor
+    
 
-    def sam_inference(self, device: str) -> List[Dict]:
+    def sam_inference(self) -> List[Dict]:
         """
         Perform inference using the HuggingFace SAM model.
 
@@ -59,22 +62,29 @@ class HuggingFaceSAMModel :
             # Extract the bounding boxes for the current image_id
             class_ids = [d['class_id'] for d in filtered_data]
             
-            # Load and preprocess the image based on the current image_id
-            # TODO: [SAM-16] use origin_RGB instead.
-            image = Image.open(self.image_paths[image_id]).convert("RGB")
+            # Get the image based on the current image_id
+            image = self.original_RGB[image_id]
 
             # Perform the inference for the current image_id
-            inputs = self.processor(image, input_boxes=[[bboxes]], return_tensors="pt").to(device)
-            outputs = self.model(**inputs)
+            inputs = self.processor(image, input_boxes=[[bboxes]], return_tensors="pt").to(self.device)
+            image_embeddings = self.model.get_image_embeddings(inputs["pixel_values"])
+            inputs.pop("pixel_values", None)
+            inputs.update({"image_embeddings": image_embeddings})
+            with torch.no_grad():
+                outputs = self.model(**inputs)
             masks = self.processor.image_processor.post_process_masks(outputs.pred_masks.cpu(), inputs["original_sizes"].cpu(), inputs["reshaped_input_sizes"].cpu())
-            
+            scores = outputs.iou_scores
 
+            # Reshape the tensor to have size (N, 3)
+            reshaped_iou_scores = outputs.iou_scores.squeeze()
+            idx_max_iou = torch.argmax(reshaped_iou_scores.view(-1, 3), dim=1).tolist()
+              
             object_segmentation_predictions.append({
                     'image_id': image_id,
                     'class_id': class_ids,
-                    'score': outputs.iou_scores,
+                    'score': [outputs.iou_scores.squeeze()[i, j, ...].item() for i, j in enumerate (idx_max_iou)],
                     'bbox': bboxes,
-                    'masks': masks[0]
+                    'masks': [masks[0][i, j, ...] for i, j in enumerate (idx_max_iou)]
                 })
 
         return object_segmentation_predictions
