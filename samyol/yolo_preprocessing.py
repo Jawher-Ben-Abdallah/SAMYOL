@@ -35,16 +35,16 @@ class YOLOPreProcessing():
 
     @staticmethod
     def get_yolo_8_preprocessing(
-        inputs: Union[List[str], List[np.ndarray]]
-        ) -> Union[List[str], List[np.ndarray]]:
+        inputs: List[str]
+        ) -> List[np.ndarray]:
         """
-        Perform YOLOv8 preprocessing on the inputs.
+        Perform YOLO-NAS preprocessing on the inputs.
 
         Args:
-            inputs (Union[List[str], List[np.ndarray]]): List of input image paths or list of input images.
+            inputs List[str]: List of input image paths .
 
         Returns:
-            inputs (Union[List[str], List[np.ndarray]]): List of input image paths or list of input images.
+            inputs List[np.ndarray]: List of input images.
         """
         origin_RGB = [load_image(image_path) for image_path in inputs]
 
@@ -52,15 +52,17 @@ class YOLOPreProcessing():
     
     @staticmethod
     def get_yolo_nas_preprocessing(
-        inputs: Union[List[str], List[np.ndarray]]
-        ) -> Union[List[str], List[np.ndarray]]:
+        inputs: List[str]
+        ) -> List[np.ndarray]:
         """
         Perform YOLO-NAS preprocessing on the inputs.
 
         Args:
-            inputs (Union[List[str], List[np.ndarray]]): List of input image paths or list of input images.
+            inputs List[str]: List of input image paths .
 
         Returns:
-            inputs (Union[List[str], List[np.ndarray]]): List of input image paths or list of input images.
+            inputs List[np.ndarray]: List of input images.
         """
-        return inputs
+        origin_RGB = [load_image(image_path) for image_path in inputs]
+
+        return [origin_RGB]
