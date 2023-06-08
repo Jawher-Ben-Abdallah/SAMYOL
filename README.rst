@@ -8,6 +8,11 @@ SAMYOL
 
 [![GitHub star chart](https://img.shields.io/github/stars/Jawher-Ben-Abdallah/SAMYOL?style=social)](https://star-history.com/#Jawher-Ben-Abdallah/SAMYOL)
 
+.. image:: https://img.shields.io/github/stars/Jawher-Ben-Abdallah/SAMYOL.svg?style=social
+   :alt: GitHub stars
+   :target: https://github.com/Jawher-Ben-Abdallah/SAMYOL/stargazers
+
+
 
 🤔 What is this?
 ----------------
