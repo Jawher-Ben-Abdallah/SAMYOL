@@ -26,6 +26,7 @@ def letterbox(
         scaleup: bool=True, 
         stride: int=32
         ) -> Tuple[np.ndarray, float, Tuple[float, float]]:
+
     """
     Resize and pad the image while meeting stride-multiple constraints.
 
@@ -100,7 +101,7 @@ def generic_yolo_preprocessing(
 def generic_ort_inference(
         model_path: str, 
         inputs: np.ndarray, 
-        cuda: bool = True
+        cuda: bool = False
         ) -> np.ndarray:
     """
     Perform inference using the ONNX model with ONNX Runtime.

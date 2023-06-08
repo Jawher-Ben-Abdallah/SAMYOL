@@ -1,49 +1,61 @@
 from samyol.yolo_preprocessing import YOLOPreProcessing
 from samyol.yolo_inference import YOLOInference
 from samyol.yolo_postprocessing import YOLOPostProcessing
+from samyol.prediction_results import SAMYOLPredictions
 from typing import Union, List, Optional, Dict, Tuple, Callable
 from samyol.sam_inference import HuggingFaceSAMModel
+import numpy as np
 
 class SAMYOL:   
     def __init__(
         self,
-        input_paths: Union[str, List[str]],
         model_path: str,
         device: str,
         version: str,
+        class_labels: List[str],
         extra_args: Optional[Dict] = None
-    ) -> None:
+        ):
         """
         Initialize the SAMYOL object.
 
         Args:
-            input_paths (Union[str, List[str]]): Path(s) to the input images.
             model_path (str): Path to the YOLO model.
             device (str): Device to use for inference.
             version (str): Version of the YOLO model to use.
+            class_labels (List[str]): List of class labels.
             extra_args (Dict, optional): Extra arguments to be passed to the YOLO-NAS inference step. Defaults to None.
         """
-        self.input_paths = input_paths
         self.model_path = model_path
         self.version = version
+        self.class_labels = class_labels
         self.kwargs = extra_args if extra_args is not None else {}
         self.device = device
 
-    def predict(self) -> Tuple[List, List]:
+    def predict(
+            self,
+            input_paths: Union[str, List[str]],
+    ) -> SAMYOLPredictions:
         """
-        Run the YOLO-based object detection pipeline and obtain object detection predictions.
+        Predicts object segmentation using the SAMYOL model.
+
+        Args:
+            input_paths (Union[str, List[str]]): Path(s) to the input image(s).
 
         Returns:
-            Tuple[List, List]: Object detection predictions as a tuple of masks and scores.
+            SAMYOLPredictions: Object containing the input images and segmentation predictions.
         """
+        if not isinstance(input_paths, List):
+            input_paths = [input_paths]
         yolo_pipeline = self.get_yolo_pipeline(self.version)
-        preprocessed_data = yolo_pipeline['preprocessing'](self.input_paths)
+        preprocessed_data = yolo_pipeline['preprocessing'](input_paths)
         outputs = yolo_pipeline['inference'](self.model_path, preprocessed_data, **self.kwargs)
-        obj_det_predictions = yolo_pipeline['postprocessing'](outputs)
-        bbox = obj_det_predictions['bbox']
-        masks, scores = HuggingFaceSAMModel(self.input_paths, bbox).sam_inference(self.device)
-        return masks, scores
-    
+        obj_det_predictions = yolo_pipeline['postprocessing'](outputs, self.class_labels)
+        object_segmentation_predictions = HuggingFaceSAMModel(preprocessed_data[-1], obj_det_predictions, self.device).sam_inference()
+        return SAMYOLPredictions(
+            images=preprocessed_data[-1], 
+            predictions=object_segmentation_predictions,
+        )
+
     @staticmethod
     def get_yolo_pipeline(version: str) -> Dict[str, Callable]:
         """
@@ -63,3 +75,4 @@ class SAMYOL:
             'inference': run_yolo_inference, 
             'postprocessing': run_yolo_postprocessing
         }
+    

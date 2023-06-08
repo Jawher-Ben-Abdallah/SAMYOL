@@ -56,18 +56,10 @@ class YOLOInference():
         except ImportError:
             print('Installing ultralytics ...')
             subprocess.check_call(["python", '-m', 'pip', 'install', 'ultralytics'])
+            from ultralytics import YOLO
         
         model = YOLO(model_path)
-        detections = []
-        for image in inputs:
-            detections.append(
-                model.predict(
-                    image, 
-                    conf=0.35, 
-                    iou=0.65, 
-                    verbose=False
-                    )
-                )
+        detections = [model.predict(image, conf=0.35, iou=0.65, verbose=False) for image in inputs[0]]
         return detections
 
     
@@ -95,6 +87,7 @@ class YOLOInference():
         except ImportError:
             print('Installing super-gradients ...')
             subprocess.check_call(["python", '-m', 'pip', 'install', 'super-gradients'])
+            from super_gradients.training import models
         
         model = models.get(
             model_type,

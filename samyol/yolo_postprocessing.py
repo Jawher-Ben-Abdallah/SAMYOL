@@ -4,12 +4,13 @@ from typing import List
 class YOLOPostProcessing():
 
     @staticmethod
-    def get_yolo_6_postprocessing(outputs) -> List[dict]:
+    def get_yolo_6_postprocessing(outputs:tuple, class_labels: List[str]) -> List[dict]:
         """
         Perform YOLOv6 post-processing on the outputs.
 
         Args:
-            outputs: Output data from the YOLOv6 model.
+            outputs (tuple): Output data from the YOLOv6 model.
+            class_labels (List[str]): List of class labels.
 
         Returns:
             List[dict]: List of object detection predictions.
@@ -37,6 +38,7 @@ class YOLOPostProcessing():
                 y2 = min(img_h, box[3])
                 object_detection_predictions.append({
                     'image_id': i,
+                    'class_label': class_labels[class_id],
                     'class_id': class_id,
                     'score': score,
                     'bbox': [x1, y1, x2, y2]
@@ -45,12 +47,13 @@ class YOLOPostProcessing():
 
 
     @staticmethod
-    def get_yolo_7_postprocessing(outputs) -> List[dict]:
+    def get_yolo_7_postprocessing(outputs: tuple, class_labels: List[str]) -> List[dict]:
         """
         Perform YOLOv7 post-processing on the outputs.
 
         Args:
-            outputs: Output data from the YOLOv7 model.
+            outputs (tuple): Output data from the YOLOv7 model.
+            class_labels (List[str]): List of class labels.
 
         Returns:
             List[dict]: List of object detection predictions.
@@ -67,6 +70,7 @@ class YOLOPostProcessing():
             score = round(float(score),3)
             object_detection_predictions.append({
                     'image_id': int(batch_id),
+                    'class_label': class_labels[cls_id],
                     'class_id': cls_id,
                     'score': score,
                     'bbox': box
@@ -74,25 +78,28 @@ class YOLOPostProcessing():
         return object_detection_predictions
     
     @staticmethod
-    def get_yolo_8_postprocessing(detections) -> List[dict]:
+    #TODO: unify the detctions/outputs 
+    def get_yolo_8_postprocessing(detections: List[object], class_labels: List[str]) -> List[dict]:
         """
         Perform YOLOv8 post-processing on the detections.
 
         Args:
-            detections: Detections from the YOLOv8 model.
+            detections (List[object]): Detections from the YOLOv8 model.
+            class_labels (List[str]): List of class labels.
 
         Returns:
             List[dict]: List of object detection predictions.
         """
         object_detection_predictions = []
         for i, detection in enumerate(detections):
-            class_names = detection[0].names
             boxes = detection[0].boxes
             for box in boxes:
+                class_id = int(box.cls.item())
                 object_detection_predictions.append(
                     {
                         'image_id': i,
-                        'class_id': class_names[int(box.cls.item())],
+                        'class_label': class_labels[class_id],
+                        'class_id': class_id,
                         'score': box.conf.item(),
                         'bbox': box.xyxy[0].numpy().round().astype(np.int32).tolist()
                     }
@@ -101,12 +108,14 @@ class YOLOPostProcessing():
 
 
     @staticmethod
-    def get_yolo_nas_postprocessing(detections) -> List[dict]:
+        #TODO: unify the detctions/outputs 
+    def get_yolo_nas_postprocessing(detections: List[object], class_labels: List[str]) -> List[dict]:
         """
         Perform YOLO-NAS post-processing on the detections.
 
         Args:
-            detections: Detections from the YOLO-NAS model.
+            detections (List[object]): Detections from the YOLO-NAS model.
+            class_labels (List[str]): List of class labels.
 
         Returns:
             List[dict]: List of object detection predictions.
@@ -121,7 +130,8 @@ class YOLOPostProcessing():
             for label, conf, bbox in zip(labels, confidence, bboxes):
                 object_detection_predictions.append({
                     'image_id': i,
-                    'class_id': class_names[int(label)],
+                    'class_label': class_labels[int(label)],
+                    'class_id': int(label),
                     'confidence': conf,
                     'bbox': bbox.round().astype(np.int32).tolist()
                 })
