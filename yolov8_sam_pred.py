@@ -37,4 +37,12 @@ if __name__ =='__main__':
 
     # Generate predictions using YOLOv6 model + SAM 
     samyol_predictions = samyol.predict(input_paths=input_paths)
-    samyol_predictions.display(0)
+    # samyol_predictions.display(0)
+    # print(samyol_predictions.predictions[0])
+    samyol_predictions.save(
+        save_dir="./", 
+        filename="test_0", 
+        fuse_masks=True, 
+        save_metadata=True, 
+        image_id=0, 
+        mask_format="png")
