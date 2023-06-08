@@ -26,6 +26,15 @@ SAMYOL is a Python library that combines an object detection model and a segment
    </div>
 
 
+.. raw:: html
+
+   <div style="overflow: auto;">
+      <img src="https://github.com/Jawher-Ben-Abdallah/SAMYOL/raw/main/assets/masks/mask_1.jpeg" alt="Mask 1" style="width: 250px; float: left; margin-right: 5px;">
+      <img src="https://github.com/Jawher-Ben-Abdallah/SAMYOL/raw/main/assets/masks/mask_3.jpeg" alt="Mask 3" style="width: 300px; float: left; margin-right: 5px;">
+      <img src="https://github.com/Jawher-Ben-Abdallah/SAMYOL/raw/main/assets/masks/mask_2.png" alt="Mask 2" style="width: 250px; float: left;">
+   </div>
+
+
 🧩 Features
 ------------
 - Integrated object detection and segmentation capabilities
