@@ -80,12 +80,13 @@ class SAMYOLPredictions():
         masks = filtered_data['masks']
         if fuse_masks:
             # Merge all masks
-            masks = np.logical_or.reduce([mask.numpy() for mask in masks])
-            cv2.imwrite(f"{save_dir}/{filename}.{mask_format}", masks.astype(np.uint8) * 255)
+            masks = [mask.numpy() for mask in masks]
+            masks = np.logical_or.reduce(np.array(masks))
+            cv2.imwrite(f"{save_dir}/{filename}.{mask_format}", masks * 255)
         else:
             # Per Mask
-            class_ids = filtered_data['class_id']
-            masks = [mask * (class_id + 1) for mask, class_id in zip(masks, class_ids)]
+            class_ids = self.predictions[image_id]['class_id']
+            masks = [mask * (class_id + 1) for (mask, class_id) in zip (masks, class_ids)]
             masks = torch.stack(masks, dim=-1)
             masks = masks.numpy().astype(np.uint8)
             cv2.imwrite(f"{save_dir}/{filename}.{mask_format}", masks)
