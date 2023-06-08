@@ -75,4 +75,3 @@ class SAMYOL:
             'inference': run_yolo_inference, 
             'postprocessing': run_yolo_postprocessing
         }
-    

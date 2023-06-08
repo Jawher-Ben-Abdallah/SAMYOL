@@ -71,7 +71,6 @@ def letterbox(
     im = cv2.copyMakeBorder(im, top, bottom, left, right, cv2.BORDER_CONSTANT, value=color)  # add border
     return im, r, (dw, dh)
 
-
 def generic_yolo_preprocessing(
         inputs: List[str]
         ) -> Tuple[np.ndarray, List[Tuple[np.ndarray, float, Tuple[float, float]]], List[np.ndarray]]:
@@ -99,7 +98,6 @@ def generic_yolo_preprocessing(
     np_batch = np.concatenate([data[0] for data in resize_data])
     return np_batch, resize_data, origin_RGB
 
-
 def generic_ort_inference(
         model_path: str, 
         inputs: np.ndarray, 
@@ -122,7 +120,6 @@ def generic_ort_inference(
     inname = [i.name for i in session.get_inputs()]
     detections = session.run(outname,{inname[0]: inputs})
     return detections
-
 
 def check_and_install_library(library_name):
     try:
