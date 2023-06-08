@@ -100,7 +100,7 @@ class YOLOPostProcessing():
                         'class_label': class_labels[class_id],
                         'class_id': class_id,
                         'score': box.conf.item(),
-                        'bbox': box.xyxy[0].numpy().round().astype(np.int32).tolist()
+                        'bbox': box.xyxy[0].cpu().numpy().round().astype(np.int32).tolist()
                     }
                 )
         return object_detection_predictions
