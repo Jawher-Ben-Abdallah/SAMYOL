@@ -9,12 +9,10 @@ class SAMYOLPredictions():
     def __init__(
             self,
             images: List[np.ndarray],
-            predictions: List[Dict],
-            class_labels: List[str]
+            predictions: List[Dict]
     ):
         self.images = images
         self.predictions = predictions
-        self.class_labels = class_labels
 
     def display(self) -> None:
         """

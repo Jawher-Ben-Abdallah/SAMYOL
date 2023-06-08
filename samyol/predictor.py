@@ -49,12 +49,11 @@ class SAMYOL:
         yolo_pipeline = self.get_yolo_pipeline(self.version)
         preprocessed_data = yolo_pipeline['preprocessing'](input_paths)
         outputs = yolo_pipeline['inference'](self.model_path, preprocessed_data, **self.kwargs)
-        obj_det_predictions = yolo_pipeline['postprocessing'](outputs)
+        obj_det_predictions = yolo_pipeline['postprocessing'](outputs, self.class_labels)
         object_segmentation_predictions = HuggingFaceSAMModel(preprocessed_data[-1], obj_det_predictions, self.device).sam_inference()
         return SAMYOLPredictions(
             images=preprocessed_data[-1], 
             predictions=object_segmentation_predictions,
-            class_labels=self.class_labels
         )
 
     @staticmethod
@@ -76,3 +75,4 @@ class SAMYOL:
             'inference': run_yolo_inference, 
             'postprocessing': run_yolo_postprocessing
         }
+    
