@@ -21,13 +21,13 @@ SAMYOL is a Python library that combines an object detection model and a segment
 
 
 .. figure:: https://github.com/Jawher-Ben-Abdallah/SAMYOL/blob/main/assets/examples/Example_1.jpeg
-         :scale: 50%
+         :width: 300px
 
 .. figure:: https://github.com/Jawher-Ben-Abdallah/SAMYOL/blob/main/assets/examples/Example_3.jpeg
-         :scale: 50%
+         :width: 300px
 
 .. figure:: https://github.com/Jawher-Ben-Abdallah/SAMYOL/blob/main/assets/examples/Example_2.png
-         :scale: 50%
+         :width: 300px
 
 
 🧩 Features
