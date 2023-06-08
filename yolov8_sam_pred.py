@@ -10,8 +10,8 @@ from samyol.predictor import SAMYOL
 from samyol.prediction_results import SAMYOLPredictions
 
 
-#input_paths = "./assets/0_DT7.jpg"
-input_paths = ["./assets/image1.jpg", "./assets/image2.jpg", "./assets/dog.jpg"]
+#input_paths = "./assets/images/0_DT7.jpg"
+input_paths = ["./assets/images/image1.jpg", "./assets/images/image2.jpg", "./assets/images/dog.jpg"]
 model_path = "./checkpoints/yolov8s.pt"
 version = "8"
 device = "cpu"
