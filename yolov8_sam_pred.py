@@ -7,11 +7,9 @@
 # import numpy as np
 
 from samyol.predictor import SAMYOL
-from samyol.prediction_results import SAMYOLPredictions
 
 
-#input_paths = "./assets/0_DT7.jpg"
-input_paths = ["./assets/image1.jpg", "./assets/image2.jpg", "./assets/0_DT7.jpg"]
+input_paths = ["./assets/images/image1.jpg", "./assets/images/image2.jpg", "./assets/images/dog.jpg"]
 model_path = "./checkpoints/yolov8s.pt"
 version = "8"
 device = "cpu"
@@ -29,6 +27,7 @@ class_labels = ['person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'tr
 
 if __name__ =='__main__':
 
+
     samyol = SAMYOL(
         model_path=model_path,
         version=version,
@@ -36,18 +35,6 @@ if __name__ =='__main__':
         class_labels=class_labels
     )
 
-    original_images, samyol_predictions = samyol.predict(
-        input_paths=input_paths,
-    )
-
-
-    artefacts = SAMYOLPredictions(
-        images=original_images,
-        predictions=samyol_predictions,
-        class_labels=class_labels
-    )
- 
-    artefacts.display(1)
-
-
-    
+    # Generate predictions using YOLOv6 model + SAM 
+    samyol_predictions = samyol.predict(input_paths=input_paths)
+    samyol_predictions.display(0)

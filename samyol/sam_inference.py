@@ -1,4 +1,4 @@
-import subprocess
+from .utils import check_and_install_library
 from typing import List, Dict
 import numpy as np
 import torch
@@ -30,11 +30,9 @@ class HuggingFaceSAMModel :
         Returns:
             Tuple: A tuple containing the loaded SAM model and processor.
         """
-        try:
-            from transformers import SamModel, SamProcessor
-        except ImportError:
-            print('Installing transformers ...')
-            subprocess.check_call(["python", '-m', 'pip', 'install', 'transformers', 'datasets'])
+        check_and_install_library('transformers')
+        from transformers import SamModel, SamProcessor
+
         sam_model = SamModel.from_pretrained("facebook/sam-vit-base").to(self.device)
         sam_processor = SamProcessor.from_pretrained("facebook/sam-vit-base")
         return sam_model, sam_processor
