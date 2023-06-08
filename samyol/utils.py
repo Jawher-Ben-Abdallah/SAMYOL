@@ -1,7 +1,9 @@
 import cv2
 import numpy as np
-import onnxruntime as ort
+# import onnxruntime as ort
 from typing import List, Tuple
+import importlib
+import subprocess
 
 
 def load_image(image_path: str) -> np.ndarray:
@@ -120,3 +122,14 @@ def generic_ort_inference(
     inname = [i.name for i in session.get_inputs()]
     detections = session.run(outname,{inname[0]: inputs})
     return detections
+
+
+def check_and_install_library(library_name):
+    try:
+        importlib.import_module(library_name)
+        print(f"{library_name} is already installed.")
+    except ImportError:
+        print(f"{library_name} is not installed. Installing...")
+        subprocess.check_call(['pip', 'install', library_name])
+        print(f"{library_name} has been successfully installed.")
+        

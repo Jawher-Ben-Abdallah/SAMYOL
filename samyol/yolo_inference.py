@@ -1,6 +1,4 @@
-import subprocess
-from .utils import generic_ort_inference
-from .utils import generic_ort_inference
+from .utils import generic_ort_inference, check_and_install_library
 from typing import List, Tuple
 
 
@@ -50,14 +48,8 @@ class YOLOInference():
         Returns:
             Tuple: Inference results, resize data, and original RGB images.
         """
-
-        try:
-            from ultralytics import YOLO
-        except ImportError:
-            print('Installing ultralytics ...')
-            subprocess.check_call(["python", '-m', 'pip', 'install', 'ultralytics'])
-            from ultralytics import YOLO
-        
+        check_and_install_library('ultralytics')
+        from ultralytics import YOLO
         model = YOLO(model_path)
         detections = [model.predict(image, conf=0.35, iou=0.65, verbose=False) for image in inputs[0]]
         return detections
@@ -82,13 +74,8 @@ class YOLOInference():
         Returns:
             List: List of detection results.
         """
-        try:
-            from super_gradients.training import models
-        except ImportError:
-            print('Installing super-gradients ...')
-            subprocess.check_call(["python", '-m', 'pip', 'install', 'super-gradients'])
-            from super_gradients.training import models
-        
+        check_and_install_library('super-gradients')
+        from super_gradients.training import models
         model = models.get(
             model_type,
             num_classes=num_classes,
