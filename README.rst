@@ -16,6 +16,12 @@ SAMYOL
 
 SAMYOL is a Python library that combines an object detection model and a segmentation model. It provides a unified interface for performing object detection and segmentation tasks using different versions of the YOLO model (YOLOv6, YOLOv7, YOLOv8, or YOLO-NAS) and the Segment Anything Model (SAM).
 
+🧩 Features
+------------
+- Integrated object detection and segmentation capabilities
+- Support for multiple versions of the YOLO model
+- Flexible input options for image paths
+- Easy-to-use interface for obtaining object detection predictions and segmentation masks
 
 .. raw:: html
 
@@ -35,12 +41,6 @@ SAMYOL is a Python library that combines an object detection model and a segment
    </div>
 
 
-🧩 Features
-------------
-- Integrated object detection and segmentation capabilities
-- Support for multiple versions of the YOLO model
-- Flexible input options for image paths
-- Easy-to-use interface for obtaining object detection predictions and segmentation masks
 
 
 ⏳ Quick Installation
