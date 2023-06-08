@@ -77,4 +77,4 @@ The following notebook has detailed examples and usage instructions for each YOL
 ----------------
 As an open-source project in a rapidly developing field, we are extremely open to contributions, whether it be in the form of a new feature, improved infrastructure, or better documentation.
 #TODO: Fix the link
-For detailed information on how to contribute, see [here](https://github.com/Jawher-Ben-Abdallah/SAMYOL/blob/main/CONTRIBUTING.md).
+For detailed information on how to contribute, see `here <https://github.com/Jawher-Ben-Abdallah/SAMYOL/blob/main/CONTRIBUTING.md>`_
