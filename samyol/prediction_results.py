@@ -4,6 +4,7 @@ import numpy as np
 import cv2
 import random
 import matplotlib.pyplot as plt
+import json
 
 
 class SAMYOLPredictions():
@@ -55,27 +56,48 @@ class SAMYOLPredictions():
 
         plt.show()
 
-    def save(self, save_dir: str="./", filename: str="default", fuse_masks: bool=False, image_id:int=0, format: str="png") -> None:
+    def save(self, 
+             save_dir: str="./", 
+             filename: str="default", 
+             fuse_masks: bool=False, 
+             save_metadata: bool=False, 
+             image_id:int=0, 
+             mask_format: str="png") -> None:
+
         """
-        Save the masks as images.
+        Save the masks as images and metadata as JSON file.
 
         Args:
             save_dir (str): Directory to save the images.
             filename (str): Filename for the saved images.
             fuse_masks (bool): Whether to merge all masks or save them separately.
+            save_metadata (bool): Whether to save metadata as a JSON file.
             image_id (int): Index of the image to save.
-            format (str): Image format to save.
+            mask_format (str): Image format to save.
         """
-        masks = self.predictions[image_id]['masks']
+
+        filtered_data = self.predictions[image_id]
+        masks = filtered_data['masks']
         if fuse_masks:
             # Merge all masks
             masks = [mask.numpy() for mask in masks]
             masks = np.logical_or.reduce(np.array(masks))
-            cv2.imwrite(f"{save_dir}/{filename}.{format}", masks * 255)
+            cv2.imwrite(f"{save_dir}/{filename}.{mask_format}", masks * 255)
         else:
             # Per Mask
             class_ids = self.predictions[image_id]['class_id']
             masks = [mask * (class_id + 1) for (mask, class_id) in zip (masks, class_ids)]
             masks = torch.stack(masks, dim=-1)
             masks = masks.numpy().astype(np.uint8)
-            cv2.imwrite(f"{save_dir}/{filename}.{format}", masks)
+            cv2.imwrite(f"{save_dir}/{filename}.{mask_format}", masks)
+        
+        if save_metadata:
+            metadata = {
+                'image_id': image_id, 
+                'class_id': filtered_data['class_id'], 
+                'score':  filtered_data['score'], 
+                'bbox': filtered_data['bbox'],
+                }
+            # Save dictionary as JSON file
+            with open(f"{save_dir}/{filename}.json", "w") as json_file:
+                json.dump(metadata, json_file, indent=4)
