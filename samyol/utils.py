@@ -26,6 +26,7 @@ def letterbox(
         scaleup: bool=True, 
         stride: int=32
         ) -> Tuple[np.ndarray, float, Tuple[float, float]]:
+
     """
     Resize and pad the image while meeting stride-multiple constraints.
 

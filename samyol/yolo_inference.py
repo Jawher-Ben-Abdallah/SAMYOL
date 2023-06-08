@@ -59,16 +59,7 @@ class YOLOInference():
             from ultralytics import YOLO
         
         model = YOLO(model_path)
-        detections = []
-        for image in inputs[0]:
-            detections.append(
-                model.predict(
-                    image, 
-                    conf=0.35, 
-                    iou=0.65, 
-                    verbose=False
-                    )
-                )
+        detections = [model.predict(image, conf=0.35, iou=0.65, verbose=False) for image in inputs[0]]
         return detections
 
     

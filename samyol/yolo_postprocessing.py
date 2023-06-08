@@ -4,12 +4,13 @@ from typing import List
 class YOLOPostProcessing():
 
     @staticmethod
-    def get_yolo_6_postprocessing(outputs, class_labels) -> List[dict]:
+    def get_yolo_6_postprocessing(outputs:tuple, class_labels: List[str]) -> List[dict]:
         """
         Perform YOLOv6 post-processing on the outputs.
 
         Args:
-            outputs: Output data from the YOLOv6 model.
+            outputs (tuple): Output data from the YOLOv6 model.
+            class_labels (List[str]): List of class labels.
 
         Returns:
             List[dict]: List of object detection predictions.
@@ -46,12 +47,13 @@ class YOLOPostProcessing():
 
 
     @staticmethod
-    def get_yolo_7_postprocessing(outputs, class_labels) -> List[dict]:
+    def get_yolo_7_postprocessing(outputs: tuple, class_labels: List[str]) -> List[dict]:
         """
         Perform YOLOv7 post-processing on the outputs.
 
         Args:
-            outputs: Output data from the YOLOv7 model.
+            outputs (tuple): Output data from the YOLOv7 model.
+            class_labels (List[str]): List of class labels.
 
         Returns:
             List[dict]: List of object detection predictions.
@@ -76,12 +78,14 @@ class YOLOPostProcessing():
         return object_detection_predictions
     
     @staticmethod
-    def get_yolo_8_postprocessing(detections, class_labels) -> List[dict]:
+    #TODO: unify the detctions/outputs 
+    def get_yolo_8_postprocessing(detections: List[object], class_labels: List[str]) -> List[dict]:
         """
         Perform YOLOv8 post-processing on the detections.
 
         Args:
-            detections: Detections from the YOLOv8 model.
+            detections (List[object]): Detections from the YOLOv8 model.
+            class_labels (List[str]): List of class labels.
 
         Returns:
             List[dict]: List of object detection predictions.
@@ -104,12 +108,14 @@ class YOLOPostProcessing():
 
 
     @staticmethod
-    def get_yolo_nas_postprocessing(detections, class_labels) -> List[dict]:
+        #TODO: unify the detctions/outputs 
+    def get_yolo_nas_postprocessing(detections: List[object], class_labels: List[str]) -> List[dict]:
         """
         Perform YOLO-NAS post-processing on the detections.
 
         Args:
-            detections: Detections from the YOLO-NAS model.
+            detections (List[object]): Detections from the YOLO-NAS model.
+            class_labels (List[str]): List of class labels.
 
         Returns:
             List[dict]: List of object detection predictions.

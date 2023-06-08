@@ -5,18 +5,29 @@ import cv2
 import random
 import matplotlib.pyplot as plt
 
+
 class SAMYOLPredictions():
     def __init__(
             self,
             images: List[np.ndarray],
             predictions: List[Dict]
     ):
+        """
+        Initialize SAMYOLPredictions.
+
+        Args:
+            images (List[np.ndarray]): List of input images.
+            predictions (List[Dict]): List of prediction dictionaries.
+        """
         self.images = images
         self.predictions = predictions
 
-    def display(self, index) -> None:
+    def display(self, index: int) -> None:
         """
-        Display the bounding boxes and masks.
+        Display the bounding boxes and masks for a specific image.
+
+        Args:
+            index (int): Index of the image to display.
         """
         image = self.images[index]
         target_predictions = self.predictions[index]
@@ -44,7 +55,17 @@ class SAMYOLPredictions():
 
         plt.show()
 
-    def save(self, save_dir="./", filename="default", fuse_masks=False, image_id=0, format="png"):
+    def save(self, save_dir: str="./", filename: str="default", fuse_masks: bool=False, image_id:int=0, format: str="png") -> None:
+        """
+        Save the masks as images.
+
+        Args:
+            save_dir (str): Directory to save the images.
+            filename (str): Filename for the saved images.
+            fuse_masks (bool): Whether to merge all masks or save them separately.
+            image_id (int): Index of the image to save.
+            format (str): Image format to save.
+        """
         masks = self.predictions[image_id]['masks']
         if fuse_masks:
             # Merge all masks

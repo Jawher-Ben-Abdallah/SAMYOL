@@ -1,6 +1,8 @@
 from .utils import generic_yolo_preprocessing, load_image
-from typing import List, Tuple, Union
+from typing import List, Tuple
 import numpy as np
+
+
 class YOLOPreProcessing():
     
     @staticmethod
@@ -41,7 +43,7 @@ class YOLOPreProcessing():
         Perform YOLO-NAS preprocessing on the inputs.
 
         Args:
-            inputs List[str]: List of input image paths .
+            inputs List[str]: List of input image path(s) .
 
         Returns:
             inputs List[np.ndarray]: List of input images.

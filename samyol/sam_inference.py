@@ -3,17 +3,20 @@ from typing import List, Dict
 import numpy as np
 import torch
 
+
 class HuggingFaceSAMModel :
     def __init__ (self, 
                   original_RGB: List[np.ndarray], 
                   obj_det_predictions: List[Dict], 
-                  device: str): 
+                  device: str
+                  ):
         """
         Initialize the HuggingFaceSAMModel.
 
         Args:
             original_RGB (List[np.ndarray]): List of RGB images.
-            bbox List[Dict]): Object detection predictions.
+            obj_det_predictions (List[Dict]): Object detection predictions.
+            device (str): The device to run the inference on.
         """
         self.device = device
         self.original_RGB = original_RGB

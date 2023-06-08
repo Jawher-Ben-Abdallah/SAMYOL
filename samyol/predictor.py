@@ -14,7 +14,7 @@ class SAMYOL:
         version: str,
         class_labels: List[str],
         extra_args: Optional[Dict] = None
-    ) -> None:
+        ):
         """
         Initialize the SAMYOL object.
 
@@ -34,15 +34,15 @@ class SAMYOL:
     def predict(
             self,
             input_paths: Union[str, List[str]],
-        ) -> Tuple[List[np.ndarray], List[Dict]]:
+    ) -> SAMYOLPredictions:
         """
-        Run the YOLO-based object detection pipeline followed by SAM and obtain object segmentation predictions.
+        Predicts object segmentation using the SAMYOL model.
 
         Args:
-            input_paths (Union[str, List[str]]): Path(s) to the input images.
+            input_paths (Union[str, List[str]]): Path(s) to the input image(s).
 
         Returns:
-            Tuple[List[np.ndarray], List[Dict]]: A tuple of original RGB images and object segmentation predictions.
+            SAMYOLPredictions: Object containing the input images and segmentation predictions.
         """
         if not isinstance(input_paths, List):
             input_paths = [input_paths]
