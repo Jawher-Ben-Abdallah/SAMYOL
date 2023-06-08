@@ -5,9 +5,6 @@ SAMYOL
    :target: https://opensource.org/licenses/Apache-2.0
    :alt: License: Apache 2.0
 
-
-[![GitHub star chart](https://img.shields.io/github/stars/Jawher-Ben-Abdallah/SAMYOL?style=social)](https://star-history.com/#Jawher-Ben-Abdallah/SAMYOL)
-
 .. image:: https://img.shields.io/github/stars/Jawher-Ben-Abdallah/SAMYOL.svg?style=social
    :alt: GitHub stars
    :target: https://github.com/Jawher-Ben-Abdallah/SAMYOL/stargazers
