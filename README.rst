@@ -67,7 +67,7 @@ This python library requires python>=3.11, as well as pytorch>=1.7.0 and torchvi
 The following notebook has detailed examples and usage instructions for each YOLO model:
 
  .. image:: https://colab.research.google.com/assets/colab-badge.svg
-         :target: https://colab.research.google.com/github/Rim-chan/SAMYOL.ipynb
+         :target: https://github.com/Jawher-Ben-Abdallah/SAMYOL/blob/main/SAMYOL.ipynb
 
 #TODO: Fix the link
 
@@ -75,4 +75,4 @@ The following notebook has detailed examples and usage instructions for each YOL
 ----------------
 As an open-source project in a rapidly developing field, we are extremely open to contributions, whether it be in the form of a new feature, improved infrastructure, or better documentation.
 #TODO: Fix the link
-For detailed information on how to contribute, see [here](https://bitbucket.org/rim-and-jawher/samyol/src/main/CONTRIBUTING.md).
+For detailed information on how to contribute, see [here](https://github.com/Jawher-Ben-Abdallah/SAMYOL/blob/main/CONTRIBUTING.md).
