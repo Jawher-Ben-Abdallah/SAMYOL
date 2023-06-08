@@ -22,9 +22,9 @@ SAMYOL is a Python library that combines an object detection model and a segment
 .. raw:: html
 
    <div style="overflow: auto;">
-      <img src="https://github.com/Jawher-Ben-Abdallah/SAMYOL/raw/main/assets/examples/Example_1.jpeg" alt="Example 1" style="width: 300px; float: left; margin-right: 5px;">
-      <img src="https://github.com/Jawher-Ben-Abdallah/SAMYOL/raw/main/assets/examples/Example_3.jpeg" alt="Example 3" style="width: 340px; float: left; margin-right: 5px;">
-      <img src="https://github.com/Jawher-Ben-Abdallah/SAMYOL/raw/main/assets/examples/Example_2.png" alt="Example 2" style="width: 300px; float: left;">
+      <img src="https://github.com/Jawher-Ben-Abdallah/SAMYOL/raw/main/assets/examples/Example_1.jpeg" alt="Example 1" style="width: 290px; float: left; margin-right: 5px;">
+      <img src="https://github.com/Jawher-Ben-Abdallah/SAMYOL/raw/main/assets/examples/Example_3.jpeg" alt="Example 3" style="width: 325px; float: left; margin-right: 5px;">
+      <img src="https://github.com/Jawher-Ben-Abdallah/SAMYOL/raw/main/assets/examples/Example_2.png" alt="Example 2" style="width: 290px; float: left;">
    </div>
 
 
