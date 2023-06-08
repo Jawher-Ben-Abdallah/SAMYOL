@@ -60,8 +60,9 @@ class HuggingFaceSAMModel :
             # Extract the bounding boxes for the current image_id
             bboxes = [d['bbox'] for d in filtered_data]
 
-            # Extract the bounding boxes for the current image_id
+            # Extract the class ids and class labels for the current image_id
             class_ids = [d['class_id'] for d in filtered_data]
+            class_labels = [d['class_label'] for d in filtered_data]
             
             # Get the image based on the current image_id
             image = self.original_RGB[image_id]
@@ -83,6 +84,7 @@ class HuggingFaceSAMModel :
             object_segmentation_predictions.append({
                     'image_id': image_id,
                     'class_id': class_ids,
+                    'class_label': class_labels,
                     'score': [outputs.iou_scores.squeeze()[i, j, ...].item() for i, j in enumerate (idx_max_iou)],
                     'bbox': bboxes,
                     'masks': [masks[0][i, j, ...] for i, j in enumerate (idx_max_iou)]

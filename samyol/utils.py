@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-# import onnxruntime as ort
+import onnxruntime as ort
 from typing import List, Tuple
 import importlib
 import subprocess
