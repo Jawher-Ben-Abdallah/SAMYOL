@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-# import onnxruntime as ort
+import onnxruntime as ort
 from typing import List, Tuple
 import importlib
 import subprocess
@@ -132,4 +132,3 @@ def check_and_install_library(library_name):
         print(f"{library_name} is not installed. Installing...")
         subprocess.check_call(['pip', 'install', library_name])
         print(f"{library_name} has been successfully installed.")
-        
