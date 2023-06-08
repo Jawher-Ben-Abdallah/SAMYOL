@@ -1,9 +1,10 @@
 =======
 SAMYOL
 =======
-#TODO: Fix the link
+.. image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
+   :target: https://opensource.org/licenses/Apache-2.0
+   :alt: License: Apache 2.0
 
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 [![GitHub star chart](https://img.shields.io/github/stars/Jawher-Ben-Abdallah/SAMYOL?style=social)](https://star-history.com/#Jawher-Ben-Abdallah/SAMYOL)
 
