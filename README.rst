@@ -9,6 +9,9 @@ SAMYOL
    :alt: GitHub stars
    :target: https://github.com/Jawher-Ben-Abdallah/SAMYOL/stargazers
 
+.. image:: https://github.com/Jawher-Ben-Abdallah/SAMYOL/actions/workflows/lint-format-install.yml/badge.svg
+   :alt: lint-format-install
+   :target: https://github.com/Jawher-Ben-Abdallah/SAMYOL/actions/workflows/lint-format-install.yml
 
 
 🤔 What is this?
