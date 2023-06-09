@@ -87,7 +87,7 @@ class HuggingFaceSAMModel :
                     'class_label': class_labels,
                     'score': [outputs.iou_scores.squeeze()[i, j, ...].item() for i, j in enumerate (idx_max_iou)],
                     'bbox': bboxes,
-                    'masks': [masks[0][i, j, ...] for i, j in enumerate (idx_max_iou)]
+                    'masks': [masks[0][i, j, ...].cpu().numpy() for i, j in enumerate (idx_max_iou)]
                 })
 
         return object_segmentation_predictions

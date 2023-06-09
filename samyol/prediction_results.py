@@ -33,29 +33,34 @@ class SAMYOLPredictions():
         image = self.images[index]
         target_predictions = self.predictions[index]
 
-        # Create a subplot for displaying the image, bounding boxes, and masks
-        _, ax = plt.subplots(figsize=(6, 6))
+                # Create a subplot for displaying the image, bounding boxes, and masks
+        fig, ax = plt.subplots(figsize=(6, 6))
 
-        # Plot the bounding boxes
-        for bbox, class_label in zip(target_predictions['bbox'], target_predictions['class_label']):
-            x1, y1, x2, y2 = bbox
-            color = (random.randrange(256), random.randrange(256), random.randrange(256))  # Generate a random color for each class_id
-            rect = plt.Rectangle((x1, y1), x2 - x1, y2 - y1, fill=False, edgecolor=np.array(color) / 255, linewidth=2)
-            (w, h), _ = cv2.getTextSize(class_label, cv2.FONT_HERSHEY_SIMPLEX, 0.6, 2)
-            image = cv2.rectangle(image, (x1, y1 - 20), (x1 + w, y1), color, -1)
-            image = cv2.putText(image, class_label, (x1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
-            ax.add_patch(rect)
+        # Plot the image
+        ax.imshow(image)
 
         # Plot the masks with low opacity
+        colors = []
         for mask, class_id in zip(target_predictions['masks'], target_predictions['class_id']):
             color = np.concatenate([np.random.random(3), np.array([0.6])], axis=0)
             h, w = mask.shape[-2:]
             bbox_mask = mask.reshape(h, w, 1) * color.reshape(1, 1, -1)
             ax.imshow(bbox_mask)
-        
-        # Plot the image 
-        ax.imshow(image)
+
+        # Plot the bounding boxes
+        for bbox, class_label in zip(target_predictions['bbox'], target_predictions['class_label']):
+            x1, y1, x2, y2 = bbox
+            color = (random.random(), random.random(), random.random()) # Generate a random color for each class_label
+            rect = plt.Rectangle((x1, y1), x2 - x1, y2 - y1, fill=False, edgecolor=color, linewidth=2)
+            ax.add_patch(rect)
+            ax.text(x1, y1 - 5, class_label, fontsize=8, color="black", weight="bold", bbox=dict(facecolor=color, edgecolor="black", alpha=0.8, pad=0.8))
+
+
+        # Configure the plot
         ax.axis('off')
+        plt.tight_layout()
+
+        # Show the plot
         plt.show()
 
     def save(self, 
