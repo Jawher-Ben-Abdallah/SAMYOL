@@ -95,6 +95,7 @@ class SAMYOLPredictions():
             metadata = {
                 'image_id': image_id, 
                 'class_id': filtered_data['class_id'], 
+                'class_label':filtered_data['class_label'],
                 'score':  filtered_data['score'], 
                 'bbox': filtered_data['bbox'],
                 }
