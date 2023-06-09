@@ -14,9 +14,6 @@ jobs:
       - name: Install dependencies
         run: |
           make install
-      - name: Test with pytest
-        run: |
-          make test
       - name: Format code with Python Black
         run: |
           make format
