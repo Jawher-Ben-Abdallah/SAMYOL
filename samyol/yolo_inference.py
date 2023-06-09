@@ -1,6 +1,8 @@
 import torch
-from .utils import generic_ort_inference, check_and_install_library
 from typing import List, Tuple
+from pathlib import Path
+
+from .utils import generic_ort_inference, check_and_install_library
 
 
 class YOLOInference():
@@ -88,12 +90,14 @@ class YOLOInference():
         Returns:
             List: List of detection results.
         """
-        check_and_install_library('super-gradients')
+        check_and_install_library('super_gradients')
+        import super_gradients as sg
         from super_gradients.training import models
+        sg.setup_device(device=device)
         model = models.get(
             model_type,
             num_classes=num_classes,
             checkpoint_path=model_path
         ).to(torch.device(device))
-        detections = model.predict(inputs)
+        detections = model.predict(inputs[0])
         return detections

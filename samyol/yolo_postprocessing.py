@@ -120,7 +120,6 @@ class YOLOPostProcessing():
         """
         object_detection_predictions = []
         for i, detection in enumerate(detections):
-            class_names = detection.class_names
             labels = detection.prediction.labels
             confidence = detection.prediction.confidence
             bboxes = detection.prediction.bboxes_xyxy

@@ -67,4 +67,4 @@ class YOLOPreProcessing():
         """
         origin_RGB = [load_image(image_path) for image_path in inputs]
 
-        return [origin_RGB]
+        return [inputs, origin_RGB]
