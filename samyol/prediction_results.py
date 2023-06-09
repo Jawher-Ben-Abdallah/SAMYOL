@@ -34,17 +34,16 @@ class SAMYOLPredictions():
         target_predictions = self.predictions[index]
 
         # Create a subplot for displaying the image, bounding boxes, and masks
-        fig, ax = plt.subplots(figsize=(6, 6))
-
-        # Plot the image 
-        ax.imshow(image)
-        ax.axis('off')
+        _, ax = plt.subplots(figsize=(6, 6))
 
         # Plot the bounding boxes
-        for bbox, class_id in zip(target_predictions['bbox'], target_predictions['class_id']):
+        for bbox, class_label in zip(target_predictions['bbox'], target_predictions['class_label']):
             x1, y1, x2, y2 = bbox
-            color = random.random(), random.random(), random.random()  # Generate a random color for each class_id
-            rect = plt.Rectangle((x1, y1), x2 - x1, y2 - y1, fill=False, edgecolor=color, linewidth=2)
+            color = (random.randrange(256), random.randrange(256), random.randrange(256))  # Generate a random color for each class_id
+            rect = plt.Rectangle((x1, y1), x2 - x1, y2 - y1, fill=False, edgecolor=np.array(color) / 255, linewidth=2)
+            (w, h), _ = cv2.getTextSize(class_label, cv2.FONT_HERSHEY_SIMPLEX, 0.6, 2)
+            image = cv2.rectangle(image, (x1, y1 - 20), (x1 + w, y1), color, -1)
+            image = cv2.putText(image, class_label, (x1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
             ax.add_patch(rect)
 
         # Plot the masks with low opacity
@@ -53,7 +52,10 @@ class SAMYOLPredictions():
             h, w = mask.shape[-2:]
             bbox_mask = mask.reshape(h, w, 1) * color.reshape(1, 1, -1)
             ax.imshow(bbox_mask)
-
+        
+        # Plot the image 
+        ax.imshow(image)
+        ax.axis('off')
         plt.show()
 
     def save(self, 
