@@ -99,5 +99,5 @@ class SAMYOLPredictions():
                 'bbox': filtered_data['bbox'],
                 }
             # Save dictionary as JSON file
-            with open(f"{save_dir}/{filename}.json", "w") as json_file:
+            with open(f"{save_dir}/{filename}.json", "w", encoding="utf-8") as json_file:
                 json.dump(metadata, json_file, indent=4)
