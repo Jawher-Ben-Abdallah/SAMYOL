@@ -4,6 +4,9 @@ import onnxruntime as ort
 from typing import List, Tuple
 import importlib
 import subprocess
+import os
+from urllib.request import urlretrieve
+from urllib.error import URLError
 
 
 def load_image(image_path: str) -> np.ndarray:
@@ -129,3 +132,20 @@ def check_and_install_library(library_name):
         print(f"{library_name} is not installed. Installing...")
         subprocess.check_call(['pip', 'install', library_name])
         print(f"{library_name} has been successfully installed.")
+
+def download_model_weights(url=None):
+    
+    root = "checkpoints"        
+    # downlaod SAM: ViT-H by default
+    url = "https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth"
+
+    file_name = os.path.basename(url)
+    os.makedirs(root, exist_ok=True)
+    file_path = os.path.join(root, file_name)
+    
+    if not os.path.isfile(file_path):
+        try:
+            print(f"Downloading SAM weights to {file_path} from {url}")
+            urlretrieve(url, file_path)
+        except (URLError, IOError) as _:
+            print(f"Could not download SAM Model Weights.")

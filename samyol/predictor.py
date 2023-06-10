@@ -2,9 +2,8 @@ from samyol.yolo_preprocessing import YOLOPreProcessing
 from samyol.yolo_inference import YOLOInference
 from samyol.yolo_postprocessing import YOLOPostProcessing
 from samyol.prediction_results import SAMYOLPredictions
-from typing import Union, List, Optional, Dict, Tuple, Callable
-from samyol.sam_inference import HuggingFaceSAMModel
-import numpy as np
+from samyol.sam_inference import SAM
+from typing import Union, List, Optional, Dict, Callable
 
 class SAMYOL:   
     def __init__(
@@ -12,8 +11,9 @@ class SAMYOL:
         model_path: str,
         device: str,
         version: str,
+        source: str,
         class_labels: List[str],
-        extra_args: Optional[Dict] = None
+        extra_args: Optional[Dict] = None,
         ):
         """
         Initialize the SAMYOL object.
@@ -30,6 +30,7 @@ class SAMYOL:
         self.class_labels = class_labels
         self.kwargs = extra_args if extra_args is not None else {}
         self.device = device
+        self.source = source
 
     def predict(
             self,
@@ -46,15 +47,20 @@ class SAMYOL:
         """
         if not isinstance(input_paths, List):
             input_paths = [input_paths]
+
         yolo_pipeline = self.get_yolo_pipeline(self.version)
         preprocessed_data = yolo_pipeline['preprocessing'](input_paths)
         outputs = yolo_pipeline['inference'](self.model_path, preprocessed_data, self.device, **self.kwargs)
         obj_det_predictions = yolo_pipeline['postprocessing'](outputs, self.class_labels)
-        object_segmentation_predictions = HuggingFaceSAMModel(preprocessed_data[-1], obj_det_predictions, self.device).sam_inference()
+        
+        sam_pipeline = self.get_sam_pipeline(self.source)
+        object_segmentation_predictions = sam_pipeline['sam_inference'](preprocessed_data[-1], obj_det_predictions, self.device)
+
         return SAMYOLPredictions(
             images=preprocessed_data[-1], 
             predictions=object_segmentation_predictions,
-        )
+            )
+    
 
     @staticmethod
     def get_yolo_pipeline(version: str) -> Dict[str, Callable]:
@@ -75,3 +81,19 @@ class SAMYOL:
             'inference': run_yolo_inference, 
             'postprocessing': run_yolo_postprocessing
         }
+
+    @staticmethod
+    def get_sam_pipeline(source: str) -> Dict[str, Callable]:
+        """
+        Get the SAM pipeline components based on the specified source.
+
+        Args:
+            source (str): Source for SAM model inference.
+
+        Returns:
+            Dict[str, Callable]: Dictionary containing the SAM pipeline components.
+        """
+        run_sam_inference = getattr(SAM, f"predict_from_{source}")
+        return {
+            'sam_inference': run_sam_inference
+                }

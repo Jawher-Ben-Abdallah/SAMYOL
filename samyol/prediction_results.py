@@ -33,7 +33,7 @@ class SAMYOLPredictions():
         image = self.images[index]
         target_predictions = self.predictions[index]
 
-                # Create a subplot for displaying the image, bounding boxes, and masks
+        # Create a subplot for displaying the image, bounding boxes, and masks
         fig, ax = plt.subplots(figsize=(6, 6))
 
         # Plot the image
@@ -87,15 +87,14 @@ class SAMYOLPredictions():
         masks = filtered_data['masks']
         if fuse_masks:
             # Merge all masks
-            masks = [mask.numpy() for mask in masks]
             masks = np.logical_or.reduce(np.array(masks))
             cv2.imwrite(f"{save_dir}/{filename}.{mask_format}", masks * 255)
         else:
             # Per Mask
             class_ids = self.predictions[image_id]['class_id']
             masks = [mask * (class_id + 1) for (mask, class_id) in zip (masks, class_ids)]
-            masks = torch.stack(masks, dim=-1)
-            masks = masks.numpy().astype(np.uint8)
+            masks = np.stack(masks, axis=2)
+            masks = masks.astype(np.uint8)
             cv2.imwrite(f"{save_dir}/{filename}.{mask_format}", masks)
         
         if save_metadata:
