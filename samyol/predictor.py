@@ -3,34 +3,45 @@ from samyol.yolo_inference import YOLOInference
 from samyol.yolo_postprocessing import YOLOPostProcessing
 from samyol.prediction_results import SAMYOLPredictions
 from samyol.sam_inference import SAM
+from samyol.utils import perform_samyol_input_checks
 from typing import Union, List, Optional, Dict, Callable
 
 class SAMYOL:   
     def __init__(
         self,
-        model_path: str,
-        device: str,
-        version: str,
-        source: str,
+        yolo_model_path: str,
+        yolo_version: str,
+        sam_model_type: str,
+        sam_source: str,
         class_labels: List[str],
+        device: str,
         extra_args: Optional[Dict] = None,
         ):
         """
         Initialize the SAMYOL object.
 
         Args:
-            model_path (str): Path to the YOLO model.
-            device (str): Device to use for inference.
-            version (str): Version of the YOLO model to use.
+            yolo_model_path (str): Path to the YOLO model.
+            yolo_version (str): Version of the YOLO model to use.
+            sam_model_type (str): SAM model type to use: base, large or huge.
+            sam_source (str): SAM source: HuggingFace or facebook repo.
             class_labels (List[str]): List of class labels.
+            device (str): Device to use for inference.
             extra_args (Dict, optional): Extra arguments to be passed to the YOLO-NAS inference step. Defaults to None.
         """
-        self.model_path = model_path
-        self.version = version
+        perform_samyol_input_checks(
+            yolo_version=yolo_version,
+            sam_source=sam_source,
+            sam_model_type=sam_model_type,
+            device=device
+        )
+        self.yolo_model_path = yolo_model_path
+        self.yolo_version = yolo_version
+        self.sam_model_type = sam_model_type
+        self.sam_source = sam_source
         self.class_labels = class_labels
-        self.kwargs = extra_args if extra_args is not None else {}
         self.device = device
-        self.source = source
+        self.kwargs = extra_args if extra_args is not None else {}
 
     def predict(
             self,
@@ -48,13 +59,13 @@ class SAMYOL:
         if not isinstance(input_paths, List):
             input_paths = [input_paths]
 
-        yolo_pipeline = self.get_yolo_pipeline(self.version)
+        yolo_pipeline = self.get_yolo_pipeline(self.yolo_version)
         preprocessed_data = yolo_pipeline['preprocessing'](input_paths)
-        outputs = yolo_pipeline['inference'](self.model_path, preprocessed_data, self.device, **self.kwargs)
+        outputs = yolo_pipeline['inference'](self.yolo_model_path, preprocessed_data, self.device, **self.kwargs)
         obj_det_predictions = yolo_pipeline['postprocessing'](outputs, self.class_labels)
         
-        sam_pipeline = self.get_sam_pipeline(self.source)
-        object_segmentation_predictions = sam_pipeline['sam_inference'](preprocessed_data[-1], obj_det_predictions, self.device)
+        sam_pipeline = self.get_sam_pipeline(self.sam_source)
+        object_segmentation_predictions = sam_pipeline['sam_inference'](self.sam_model_type, preprocessed_data[-1], obj_det_predictions, self.device)
 
         return SAMYOLPredictions(
             images=preprocessed_data[-1], 

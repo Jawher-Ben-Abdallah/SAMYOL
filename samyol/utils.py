@@ -133,19 +133,61 @@ def check_and_install_library(library_name):
         subprocess.check_call(['pip', 'install', library_name])
         print(f"{library_name} has been successfully installed.")
 
-def download_model_weights(url=None):
-    
-    root = "checkpoints"        
-    # downlaod SAM: ViT-H by default
-    url = "https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth"
+def download_model_weights(model_type: str) -> Tuple[str, str]:
+
+    root = "checkpoints"
+    sam_model_types = {
+        'base': "vit_b",
+        'large': "vit_l",
+        'huge': "vit_h"
+    }
+
+    match(model_type):
+        case "base":
+            url = "https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth"
+        case "large":
+            url = "https://dl.fbaipublicfiles.com/segment_anything/sam_vit_l_0b3195.pth"
+        case "huge":
+            url = "https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth"
+        case _:
+            raise ValueError("Incorrect SAM model type.")
 
     file_name = os.path.basename(url)
     os.makedirs(root, exist_ok=True)
     file_path = os.path.join(root, file_name)
     
     if not os.path.isfile(file_path):
-        try:
+        try:        
             print(f"Downloading SAM weights to {file_path} from {url}")
             urlretrieve(url, file_path)
         except (URLError, IOError) as _:
             print(f"Could not download SAM Model Weights.")
+    return sam_model_types[model_type], file_path
+
+def check_yolo_version(yolo_version: str) -> None:
+    implemented_yolo_versions = ["6", "7", "8", "nas"]
+    if not yolo_version in implemented_yolo_versions:
+        raise NotImplementedError(f"YOLO version not implemented.")
+    
+def check_device(device:str) -> None:
+    if not device in ["cuda", "cpu"]:
+        raise ValueError("Please specify 'cpu' or 'cuda' for device.")
+    
+def check_sam_source(sam_source: str) -> None:
+    if not sam_source in ["Meta", "HuggingFace"]:
+        raise NotImplementedError(f"SAM source not implemented.")
+    
+def check_sam_model_type(sam_model_type: str) -> None:
+    if not sam_model_type in ["base", "large", "huge"]:
+        raise ValueError("Incorrect SAM model type.")
+    
+def perform_samyol_input_checks(
+    yolo_version: str,
+    device: str,
+    sam_source: str,
+    sam_model_type: str
+) -> None:
+    check_yolo_version(yolo_version)
+    check_device(device)
+    check_sam_source(sam_source)
+    check_sam_model_type(sam_model_type)

@@ -6,11 +6,17 @@ import torch
 
 class SAM:
     @staticmethod
-    def predict_from_Meta(original_RGB: List[np.ndarray], obj_det_predictions: List[Dict], device: str) -> List[Dict]:
+    def predict_from_Meta(
+        sam_model_type: str,
+        original_RGB: List[np.ndarray], 
+        obj_det_predictions: List[Dict], 
+        device: str
+    ) -> List[Dict]:
         """
         Predict object segmentation using SAM from Meta.
 
         Args:
+            sam_model_type (str): SAM model type to use: base, large or huge.
             original_RGB (List[np.ndarray]): List of RGB images.
             obj_det_predictions (List[Dict]): Object detection predictions.
             device (str): Device for inference.
@@ -21,8 +27,8 @@ class SAM:
         # Load Model
         check_and_install_library('segment_anything')
         from segment_anything import SamPredictor, sam_model_registry
-        download_model_weights()
-        sam = sam_model_registry['vit_b'](checkpoint='./checkpoints/sam_vit_b_01ec64.pth').to(device)
+        model_type, model_path = download_model_weights(sam_model_type)
+        sam = sam_model_registry[model_type](checkpoint=model_path).to(device)
         predictor = SamPredictor(sam)
 
         # Get predictions from SAM
@@ -72,11 +78,17 @@ class SAM:
         return object_segmentation_predictions
 
     @staticmethod
-    def predict_from_HuggingFace(original_RGB: List[np.ndarray], obj_det_predictions: List[Dict], device: str) -> List[Dict]:
+    def predict_from_HuggingFace(
+        sam_model_type: str,
+        original_RGB: List[np.ndarray], 
+        obj_det_predictions: List[Dict], 
+        device: str
+    ) -> List[Dict]:
         """
         Predict object segmentation using SAM from Meta.
 
         Args:
+            sam_model_type (str): SAM model type to use: base, large or huge.
             original_RGB (List[np.ndarray]): List of RGB images.
             obj_det_predictions (List[Dict]): Object detection predictions.
             device (str): Device for inference.
@@ -88,8 +100,8 @@ class SAM:
         check_and_install_library('transformers')
         from transformers import SamModel, SamProcessor
 
-        sam_model = SamModel.from_pretrained("facebook/sam-vit-base").to(device)
-        sam_processor = SamProcessor.from_pretrained("facebook/sam-vit-base")
+        sam_model = SamModel.from_pretrained(f"facebook/sam-vit-{sam_model_type}").to(device)
+        sam_processor = SamProcessor.from_pretrained(f"facebook/sam-vit-{sam_model_type}")
 
         # Get predictions from SAM
         object_segmentation_predictions = []
