@@ -1,9 +1,9 @@
 from typing import List, Dict
-import torch
 import numpy as np
 import cv2
 import random
 import matplotlib.pyplot as plt
+from PIL import Image
 import json
 
 
@@ -95,7 +95,8 @@ class SAMYOLPredictions():
             masks = [mask * (class_id + 1) for (mask, class_id) in zip (masks, class_ids)]
             masks = np.stack(masks, axis=2)
             masks = masks.astype(np.uint8)
-            cv2.imwrite(f"{save_dir}/{filename}.{mask_format}", masks)
+            pil_masks = Image.fromarray(masks)
+            pil_masks.save(f"{save_dir}/{filename}.{mask_format}")
         
         if save_metadata:
             metadata = {
