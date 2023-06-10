@@ -13,7 +13,7 @@ setup(
   long_description_content_type="text/markdown",
   url="https://github.com/Jawher-Ben-Abdallah/SAMYOL",
   author="Jawher Ben Abdallah - Rim Sleimi",
-  author_email="jawher.b.abdallah@gmail.com - sleimi.rim1996@gmail.com",
+  author_email="jawher.b.abdallah@gmail.com",
   license='Apache License 2.0',
   classifiers=[
       "License :: OSI Approved :: Apache 2.0 License",
