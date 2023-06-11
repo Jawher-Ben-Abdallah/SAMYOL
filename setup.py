@@ -7,7 +7,7 @@ setup(
   name="SAMYOL",
   version="1.0.0",
   description="Combines YOLO models and SAM",
-  package_dir={"": "."},
+  package_dir={"samyol": "."},
   packages=find_packages(where="samyol"),
   long_description=long_description,
   long_description_content_type="text/markdown",
