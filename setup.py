@@ -29,7 +29,8 @@ setup(
         "scipy>=1.4.1",
         "torch>=1.7.0",
         "torchvision>=0.8.1",
-        "tqdm>=4.64.0",        
+        "tqdm>=4.64.0", 
+        "onnxruntime"
     ],
     
     extras_require={"dev" : "twine>=4.0.2"},
