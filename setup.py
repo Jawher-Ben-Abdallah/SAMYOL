@@ -4,8 +4,8 @@ with open("README.rst", "r", encoding="utf-8") as f:
     long_description = f.read()
 
 setup(
-  name="samyol",
-  version="1.0.2",
+  name="SAMYOL",
+  version="1.0.3",
   description="Combines YOLO models and SAM",
   packages=find_packages(),
   long_description=long_description,
