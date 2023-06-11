@@ -16,7 +16,6 @@ setup(
   author_email="jawher.b.abdallah@gmail.com",
   license='Apache License 2.0',
   classifiers=[
-      "LICENSE :: OSI APPROVED :: APACHE SOFTWARE LICENSE",
       "Programming Language :: Python :: 3.10",
     ],
     keywords="YOLOv6, YOLOv7, YOLOv8, YOLO-NAS SAM, Object_Detection, Segmentation",
