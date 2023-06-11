@@ -62,8 +62,8 @@ This python library requires python>=3.11, as well as pytorch>=1.7.0 and torchvi
   pip install git+https://github.com/Jawher-Ben-Abdallah/SAMYOL.git 
   # or clone the repository locally and install 
   git clone git@github.com:Jawher-Ben-Abdallah/SAMYOL.git
-  cd segment-anything; 
-  pip install -e .
+  cd SAMYOL
+  pip install .
 
 
 🚀 Getting Started
