@@ -1,9 +1,9 @@
-from samyol.yolo_preprocessing import YOLOPreProcessing
-from samyol.yolo_inference import YOLOInference
-from samyol.yolo_postprocessing import YOLOPostProcessing
-from samyol.prediction_results import SAMYOLPredictions
-from samyol.sam_inference import SAM
-from samyol.utils import perform_samyol_input_checks
+from SAMYOL.yolo_preprocessing import YOLOPreProcessing
+from SAMYOL.yolo_inference import YOLOInference
+from SAMYOL.yolo_postprocessing import YOLOPostProcessing
+from SAMYOL.prediction_results import SAMYOLPredictions
+from SAMYOL.sam_inference import SAM
+from SAMYOL.utils import perform_samyol_input_checks
 from typing import Union, List, Optional, Dict, Callable
 
 class SAMYOL:   
