@@ -4,7 +4,7 @@ with open("README.rst", "r", encoding="utf-8") as f:
     long_description = f.read()
 
 setup(
-  name="SAMYOL",
+  name="SAMYOL_",
   version="1.0.0",
   description="Combines YOLO models and SAM",
   package_dir={"": "samyol"},
