@@ -72,9 +72,9 @@ This python library requires python>=3.11, as well as pytorch>=1.7.0 and torchvi
 The following notebook has detailed examples and usage instructions for each YOLO model:
 
  .. image:: https://colab.research.google.com/assets/colab-badge.svg
-         :target: https://github.com/Jawher-Ben-Abdallah/SAMYOL/blob/main/SAMYOL.ipynb
+         :target: https://colab.research.google.com/github/Jawher-Ben-Abdallah/SAMYOL/blob/main/SAMYOL.ipynb?authuser=1
 
-#TODO: Fix the link
+
 
 💁 Contributing
 ----------------
