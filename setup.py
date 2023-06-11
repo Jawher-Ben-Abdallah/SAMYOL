@@ -4,11 +4,10 @@ with open("README.rst", "r", encoding="utf-8") as f:
     long_description = f.read()
 
 setup(
-  name="SAMYOL",
-  version="1.0.1",
+  name="samyol",
+  version="1.0.2",
   description="Combines YOLO models and SAM",
-  package_dir={"": "samyol"},
-  packages=find_packages(where="samyol"),
+  packages=find_packages(),
   long_description=long_description,
   long_description_content_type="text/markdown",
   url="https://github.com/Jawher-Ben-Abdallah/SAMYOL",
