@@ -5,7 +5,7 @@ with open("README.rst", "r", encoding="utf-8") as f:
 
 setup(
   name="SAMYOL",
-  version="1.0.5",
+  version="1.0.6",
   description="Combines YOLO models and SAM",
   packages=find_packages(),
   long_description=long_description,
@@ -13,7 +13,7 @@ setup(
   project_urls={
         'Source': 'https://github.com/Jawher-Ben-Abdallah/SAMYOL',
     },
-  author="Jawher Ben Abdallah - Rim Sleimi",
+  author="Jawher Ben Abdallah, Rim Sleimi",
   author_email="jawher.b.abdallah@gmail.com, sleimi.rim1996@gmail.com",
   license='Apache License 2.0',
   classifiers=[
