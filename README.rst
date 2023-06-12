@@ -25,6 +25,7 @@ SAMYOL is a Python library that combines an object detection model and a segment
 - Support for multiple versions of the YOLO model
 - Flexible input options for image paths
 - Easy-to-use interface for obtaining object detection predictions and segmentation masks
+- Supports SAM infrence from both Facebook and HuggingFace
 
 .. raw:: html
 
@@ -50,7 +51,7 @@ SAMYOL is a Python library that combines an object detection model and a segment
 ---------------------
 SAMYOL is installed using pip. 
 
-This python library requires python>=3.11, as well as pytorch>=1.7.0 and torchvision>=0.8.1. Installing both PyTorch and TorchVision with CUDA support is strongly recommended. We will also need the models checkpoints. These will be installed automatically if they are not already installed.
+This python library requires python>=3.10, as well as pytorch>=1.7.0 and torchvision>=0.8.1. Installing both PyTorch and TorchVision with CUDA support is strongly recommended. We will also need the models checkpoints. These will be installed automatically if they are not already installed.
 
 
 .. code-block:: shell
