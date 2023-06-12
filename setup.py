@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 long_description = 'SAMYOL is a Python library that combines an object detection model (YOLOv6, YOLOv7, YOLOv8, or YOLO-NAS) and the Segment Anything Model (SAM).'
 setup(
   name="SAMYOL",
-  version="1.0.8",
+  version="1.0.9",
   description="Combines YOLO models and SAM",
   packages=find_packages(),
   long_description=long_description,
