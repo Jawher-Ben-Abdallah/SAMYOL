@@ -1,14 +1,18 @@
 from setuptools import setup, find_packages
+import pypandoc
 
-with open("README.rst", "r", encoding="utf-8") as f:
-    long_description = f.read()
+# Convert .rst file to .md
+readme_md = pypandoc.convert_file('README.rst', 'md')
+
+# with open("README.rst", "r", encoding="utf-8") as f:
+#     long_description = f.read()
 
 setup(
   name="SAMYOL",
-  version="1.0.7",
+  version="1.0.8",
   description="Combines YOLO models and SAM",
   packages=find_packages(),
-  long_description=long_description,
+  long_description=readme_md,
   long_description_content_type="text/markdown",
   project_urls={
         'Source': 'https://github.com/Jawher-Ben-Abdallah/SAMYOL',
