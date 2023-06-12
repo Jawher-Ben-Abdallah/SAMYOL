@@ -1,11 +1,7 @@
 from setuptools import setup, find_packages
-import pypandoc
 
-# Convert .rst file to .md
-readme_md = pypandoc.convert_file('README.rst', 'md')
-
-# with open("README.rst", "r", encoding="utf-8") as f:
-#     long_description = f.read()
+with open("README.rst", "r", encoding="utf-8") as f:
+    long_description = f.read()
 
 setup(
   name="SAMYOL",
@@ -38,7 +34,6 @@ setup(
         "torchvision>=0.8.1",
         "tqdm>=4.64.0", 
         "onnxruntime",
-        "pypandoc"
     ],
     
     extras_require={"dev" : "twine>=4.0.2"},
