@@ -52,18 +52,35 @@ SAMYOL is installed using pip.
 
 This python library requires python>=3.11, as well as pytorch>=1.7.0 and torchvision>=0.8.1. Installing both PyTorch and TorchVision with CUDA support is strongly recommended. We will also need the models checkpoints. These will be installed automatically if they are not already installed.
 
-```
-# Install SAMYOL
-pip install SAMYOL
-# or
-conda install SAMYOL -c conda-forge
-# or 
-pip install git+https://github.com/Jawher-Ben-Abdallah/SAMYOL.git 
-# or clone the repository locally and install 
-git clone git@github.com:Jawher-Ben-Abdallah/SAMYOL.git
-cd SAMYOL
-pip install .
-```
+You can install SAMYOL using one of the following methods:
+
+Method 1: Using pip
+~~~~~~~~~~~~~~~~~~~
+.. code-block:: shell
+
+   pip install SAMYOL
+
+Method 2: Using conda
+~~~~~~~~~~~~~~~~~~~~~
+.. code-block:: shell
+
+   conda install SAMYOL -c conda-forge
+
+Method 3: Installing from GitHub using pip
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. code-block:: shell
+
+   pip install git+https://github.com/Jawher-Ben-Abdallah/SAMYOL.git
+
+Method 4: Cloning the repository and installing locally
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. code-block:: shell
+
+   git clone git@github.com:Jawher-Ben-Abdallah/SAMYOL.git
+   cd SAMYOL
+   pip install .
+
+
 
 🚀 Getting Started
 -------------------
