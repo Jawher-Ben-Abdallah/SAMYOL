@@ -34,4 +34,4 @@ jobs:
         TWINE_USERNAME: __token__
         TWINE_PASSWORD: ${{ secrets.SAMYOL_PACKAGE }}
       run: |
-        python -m twine upload --skip-existing dist/*
+        python -m twine upload --skip-existing dist/* --verbose
