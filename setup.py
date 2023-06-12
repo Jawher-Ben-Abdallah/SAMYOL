@@ -5,14 +5,16 @@ with open("README.rst", "r", encoding="utf-8") as f:
 
 setup(
   name="SAMYOL",
-  version="1.0.6",
+  version="1.0.7",
   description="Combines YOLO models and SAM",
   packages=find_packages(),
   long_description=long_description,
-  long_description_content_type="text/x-rst",
-  url="https://github.com/Jawher-Ben-Abdallah/SAMYOL",
+  long_description_content_type="text/markdown",
+  project_urls={
+        'Source': 'https://github.com/Jawher-Ben-Abdallah/SAMYOL',
+    },
   author="Jawher Ben Abdallah - Rim Sleimi",
-  author_email="jawher.b.abdallah@gmail.com",
+  author_email="jawher.b.abdallah@gmail.com, sleimi.rim1996@gmail.com",
   license='Apache License 2.0',
   classifiers=[
       "Programming Language :: Python :: 3.10",
