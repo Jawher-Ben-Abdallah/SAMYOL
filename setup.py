@@ -40,6 +40,6 @@ setup(
         "onnxruntime"
     ],
     
-    extras_require={"dev" : "twine>=4.0.2"},
+    extras_require={"dev" : "twine>=4.0.2", "pypandoc"},
     python_requires=">=3.10",
 )
