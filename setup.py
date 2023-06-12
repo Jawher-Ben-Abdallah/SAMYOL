@@ -37,9 +37,10 @@ setup(
         "torch>=1.7.0",
         "torchvision>=0.8.1",
         "tqdm>=4.64.0", 
-        "onnxruntime"
+        "onnxruntime",
+        "pypandoc"
     ],
     
-    extras_require={"dev" : ["twine>=4.0.2", "pypandoc"]},
+    extras_require={"dev" : "twine>=4.0.2"},
     python_requires=">=3.10",
 )
