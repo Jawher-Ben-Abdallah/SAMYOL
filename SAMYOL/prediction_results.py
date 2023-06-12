@@ -30,6 +30,9 @@ class SAMYOLPredictions():
         Args:
             index (int): Index of the image to display.
         """
+        if not index in self.predictions.keys():
+            raise Exception(f"No predictions found for image of id: {index}.")
+        
         image = self.images[index]
         target_predictions = self.predictions[index]
 
@@ -82,7 +85,9 @@ class SAMYOLPredictions():
             image_id (int): Index of the image to save.
             mask_format (str): Image format to save.
         """
-
+        if not image_id in self.predictions.keys():
+            raise Exception(f"No predictions found for image of id: {image_id}.")
+        
         filtered_data = self.predictions[image_id]
         masks = filtered_data['masks']
         if fuse_masks:

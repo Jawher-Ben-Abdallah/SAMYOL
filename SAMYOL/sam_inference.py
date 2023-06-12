@@ -32,7 +32,7 @@ class SAM:
         predictor = SamPredictor(sam)
 
         # Get predictions from SAM
-        object_segmentation_predictions = []
+        object_segmentation_predictions = {}
 
         image_ids = list(set([d['image_id'] for d in obj_det_predictions]))
 
@@ -66,13 +66,14 @@ class SAM:
             )
             idx_max_iou = torch.argmax(scores.view(-1, 3), dim=1).tolist()
 
-            object_segmentation_predictions.append({
-                'image_id': image_id,
-                'class_id': class_ids,
-                'class_label': class_labels,
-                'score': [scores.squeeze()[i, j, ...].item() for i, j in enumerate(idx_max_iou)],
-                'bbox': bboxes,
-                'masks': [masks[i, j, ...].cpu().numpy() for i, j in enumerate(idx_max_iou)]
+            object_segmentation_predictions.update({
+                image_id : {
+                    'class_id': class_ids,
+                    'class_label': class_labels,
+                    'score': [scores.squeeze()[i, j, ...].item() for i, j in enumerate(idx_max_iou)],
+                    'bbox': bboxes,
+                    'masks': [masks[i, j, ...].cpu().numpy() for i, j in enumerate(idx_max_iou)]
+                }
             })
 
         return object_segmentation_predictions
@@ -104,7 +105,7 @@ class SAM:
         sam_processor = SamProcessor.from_pretrained(f"facebook/sam-vit-{sam_model_type}")
 
         # Get predictions from SAM
-        object_segmentation_predictions = []
+        object_segmentation_predictions = {}
 
         image_ids = list(set([d['image_id'] for d in obj_det_predictions]))
 
@@ -136,13 +137,14 @@ class SAM:
             reshaped_iou_scores = outputs.iou_scores.squeeze()
             idx_max_iou = torch.argmax(reshaped_iou_scores.view(-1, 3), dim=1).tolist()
 
-            object_segmentation_predictions.append({
-                'image_id': image_id,
-                'class_id': class_ids,
-                'class_label': class_labels,
-                'score': [outputs.iou_scores.squeeze()[i, j, ...].item() for i, j in enumerate(idx_max_iou)],
-                'bbox': bboxes,
-                'masks': [masks[0][i, j, ...].cpu().numpy() for i, j in enumerate(idx_max_iou)]
+            object_segmentation_predictions.update({
+                image_id : {
+                    'class_id': class_ids,
+                    'class_label': class_labels,
+                    'score': [outputs.iou_scores.squeeze()[i, j, ...].item() for i, j in enumerate(idx_max_iou)],
+                    'bbox': bboxes,
+                    'masks': [masks[0][i, j, ...].cpu().numpy() for i, j in enumerate(idx_max_iou)]
+                }
             })
 
         return object_segmentation_predictions
