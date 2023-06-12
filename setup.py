@@ -5,7 +5,7 @@ with open("README.rst", "r", encoding="utf-8") as f:
 
 setup(
   name="SAMYOL",
-  version="1.0.5",
+  version="1.0.6",
   description="Combines YOLO models and SAM",
   packages=find_packages(),
   long_description=long_description,
