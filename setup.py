@@ -8,7 +8,7 @@ setup(
   version="1.0.8",
   description="Combines YOLO models and SAM",
   packages=find_packages(),
-  long_description=readme_md,
+  long_description=long_description,
   long_description_content_type="text/x-rst",
   project_urls={
         'Source': 'https://github.com/Jawher-Ben-Abdallah/SAMYOL',
