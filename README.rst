@@ -65,21 +65,20 @@ Method 2: Using conda
 .. code-block:: shell
 
    conda install SAMYOL -c conda-forge
-
+   
 Method 3: Installing from GitHub using pip
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. code-block:: shell
 
    pip install git+https://github.com/Jawher-Ben-Abdallah/SAMYOL.git
 
 Method 4: Cloning the repository and installing locally
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. code-block:: shell
 
    git clone git@github.com:Jawher-Ben-Abdallah/SAMYOL.git
    cd SAMYOL
    pip install .
-
 
 
 🚀 Getting Started
