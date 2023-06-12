@@ -1,8 +1,6 @@
 from setuptools import setup, find_packages
 
-with open("README.rst", "r", encoding="utf-8") as f:
-    long_description = f.read()
-
+long_description = 'SAMYOL is a Python library that combines an object detection model (YOLOv6, YOLOv7, YOLOv8, or YOLO-NAS) and the Segment Anything Model (SAM).'
 setup(
   name="SAMYOL",
   version="1.0.8",
