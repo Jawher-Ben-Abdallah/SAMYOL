@@ -11,7 +11,7 @@ class SAM:
         original_RGB: List[np.ndarray], 
         obj_det_predictions: List[Dict], 
         device: str
-    ) -> List[Dict]:
+    ) -> Dict[str, Dict[str, List]]:
         """
         Predict object segmentation using SAM from Meta.
 
@@ -22,7 +22,7 @@ class SAM:
             device (str): Device for inference.
 
         Returns:
-            List[Dict]: List of object segmentation predictions.
+            Dict[str, Dict[str, List]]: Dictionary of object segmentation predictions.
         """
         # Load Model
         check_and_install_library('segment_anything')
@@ -84,7 +84,7 @@ class SAM:
         original_RGB: List[np.ndarray], 
         obj_det_predictions: List[Dict], 
         device: str
-    ) -> List[Dict]:
+    ) -> Dict[str, Dict[str, List]]:
         """
         Predict object segmentation using SAM from Meta.
 
@@ -95,7 +95,7 @@ class SAM:
             device (str): Device for inference.
 
         Returns:
-            List[Dict]: List of object segmentation predictions.
+            Dict[str, Dict[str, List]]: Dictionary of object segmentation predictions.
         """
         # Load SAM
         check_and_install_library('transformers')
