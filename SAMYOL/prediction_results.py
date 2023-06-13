@@ -11,14 +11,14 @@ class SAMYOLPredictions():
     def __init__(
             self,
             images: List[np.ndarray],
-            predictions: List[Dict]
+            predictions: Dict[str, Dict[str, List]]
     ):
         """
         Initialize SAMYOLPredictions.
 
         Args:
             images (List[np.ndarray]): List of input images.
-            predictions (List[Dict]): List of prediction dictionaries.
+            predictions (Dict[str, Dict[str, List]]): Dictionary of object segmentation predictions.
         """
         self.images = images
         self.predictions = predictions
