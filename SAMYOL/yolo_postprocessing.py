@@ -4,6 +4,40 @@ from typing import List
 class YOLOPostProcessing():
 
     @staticmethod
+    def get_yolo_5_postprocessing(detections: object, class_labels: List[str]) -> List[dict]:
+        """
+        Perform YOLOv5 post-processing on the detections.
+
+        Args:
+            detections (object): YOLOv5 <class 'models.common.Detections'> instance.
+            class_labels (List[str]): List of class labels.
+
+        Returns:
+            List[dict]: List of object detection predictions.
+        """
+        object_detection_predictions = []
+
+        for image_id in range(len(detections.pandas())):
+            detections_dataframe = detections.pandas().xyxy[image_id]
+            bboxes = [[row['xmin'], row['ymin'], row['xmax'], row['ymax']] for index, row in detections_dataframe.iterrows()]
+            scores = [row['confidence'] for index, row in detections_dataframe.iterrows()]
+            class_ids = [row['class'] for index, row in detections_dataframe.iterrows()]
+            class_label = [class_labels[class_id] for class_id in class_ids]
+
+
+            object_detection_predictions.append(
+                {
+                    'image_id': image_id,
+                    'class_label': class_label,
+                    'class_id': class_ids,
+                    'score': scores,
+                    'bbox': bboxes
+                }
+            )
+        return object_detection_predictions
+
+
+    @staticmethod
     def get_yolo_6_postprocessing(detections:tuple, class_labels: List[str]) -> List[dict]:
         """
         Perform YOLOv6 post-processing on the detections.

@@ -8,6 +8,33 @@ from .utils import generic_ort_inference, check_and_install_library
 class YOLOInference():
 
     @staticmethod
+    def get_yolo_5_inference(model_path: str, inputs: List, device:str) -> List:
+        """
+        Perform YOLO-5 inference.
+
+        Args:
+            model_path (str): Path to the YOLOv8 model.
+            inputs (Tuple): Input data.
+            device (str): Device to use for inference.
+
+        Returns:
+            Tuple: Inference results, resize data, and original RGB images.
+        """
+        check_and_install_library('ultralytics')
+        from ultralytics import YOLO
+        model = Ytorch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
+        detections = model(imgs)
+        
+        [model.predict(
+            image, 
+            conf=0.35, 
+            iou=0.65, 
+            verbose=False, 
+            device=str(torch.cuda.current_device()) if device=="cuda" else "cpu"
+        ) for image in inputs[0]]
+        return detections
+
+    @staticmethod
     def get_yolo_6_inference(model_path: str, inputs: Tuple, device: str) -> Tuple:
         """
         Perform YOLO-6 inference.
