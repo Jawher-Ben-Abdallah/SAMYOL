@@ -1,37 +1,31 @@
 import torch
 from typing import List, Tuple
 from pathlib import Path
-
 from .utils import generic_ort_inference, check_and_install_library
 
 
 class YOLOInference():
 
     @staticmethod
-    def get_yolo_5_inference(model_path: str, inputs: List, device:str) -> List:
+    def get_yolo_5_inference(model_type: str, inputs: List, device: str) -> List:
         """
         Perform YOLO-5 inference.
 
         Args:
             model_path (str): Path to the YOLOv8 model.
-            inputs (Tuple): Input data.
-            device (str): Device to use for inference.
+            inputs (List): Input data.
 
         Returns:
-            Tuple: Inference results, resize data, and original RGB images.
+            detections (List): List of detection results.
         """
         check_and_install_library('ultralytics')
-        from ultralytics import YOLO
-        model = Ytorch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
-        detections = model(imgs)
-        
-        [model.predict(
-            image, 
-            conf=0.35, 
-            iou=0.65, 
-            verbose=False, 
-            device=str(torch.cuda.current_device()) if device=="cuda" else "cpu"
-        ) for image in inputs[0]]
+        model = torch.hub.load(
+            'ultralytics/yolov5', 
+            model_type, 
+            pretrained=True, 
+            device=str(torch.cuda.current_device()) if device=="cuda" else "cpu") 
+
+        detections = model(inputs)
         return detections
 
     @staticmethod
@@ -77,11 +71,11 @@ class YOLOInference():
 
         Args:
             model_path (str): Path to the YOLOv8 model.
-            inputs (Tuple): Input data.
+            inputs (List): Input data.
             device (str): Device to use for inference.
 
         Returns:
-            Tuple: Inference results, resize data, and original RGB images.
+            detections (List): List of detection results.
         """
         check_and_install_library('ultralytics')
         from ultralytics import YOLO
@@ -115,7 +109,7 @@ class YOLOInference():
             num_classes (int): Number of classes.
 
         Returns:
-            List: List of detection results.
+            detections (List): List of detection results.
         """
         check_and_install_library('super_gradients')
         import super_gradients as sg

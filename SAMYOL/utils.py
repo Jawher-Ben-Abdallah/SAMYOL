@@ -165,7 +165,7 @@ def download_model_weights(model_type: str) -> Tuple[str, str]:
     return sam_model_types[model_type], file_path
 
 def check_yolo_version(yolo_version: str) -> None:
-    implemented_yolo_versions = ["6", "7", "8", "nas"]
+    implemented_yolo_versions = ["5","6", "7", "8", "nas"]
     if not yolo_version in implemented_yolo_versions:
         raise NotImplementedError(f"YOLO version not implemented.")
     
