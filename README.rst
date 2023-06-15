@@ -13,6 +13,8 @@ SAMYOL
    :alt: lint-format-install
    :target: https://github.com/Jawher-Ben-Abdallah/SAMYOL/actions/workflows/lint-format-install.yml
 
+.. image:: https://img.shields.io/pypi/v/SAMYOL.svg
+   :target: https://pypi.org/project/SAMYOL/
 
 🤔 What is this?
 ----------------
