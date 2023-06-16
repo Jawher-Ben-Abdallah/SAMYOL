@@ -25,7 +25,7 @@ class YOLOInference():
             pretrained=True, 
             device=str(torch.cuda.current_device()) if device=="cuda" else "cpu") 
 
-        detections = model(inputs)
+        detections = model(inputs[0])
         return detections
 
     @staticmethod
