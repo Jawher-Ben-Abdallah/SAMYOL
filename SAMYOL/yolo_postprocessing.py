@@ -15,27 +15,21 @@ class YOLOPostProcessing():
         Returns:
             List[dict]: List of object detection predictions.
         """
-        object_detection_predictions = []
 
-        for image_id in range(len(detections.pandas())):
-            detections_dataframe = detections.pandas().xyxy[image_id]
-            bboxes = [[row['xmin'], row['ymin'], row['xmax'], row['ymax']] for index, row in detections_dataframe.iterrows()]
-            scores = [row['confidence'] for index, row in detections_dataframe.iterrows()]
-            class_ids = [row['class'] for index, row in detections_dataframe.iterrows()]
-            class_label = [class_labels[class_id] for class_id in class_ids]
+        detections_dataframe = detections.pandas().xyxy
+        object_detection_predictions = [
+            {
+                'image_id': image_id,
+                'class_label': class_labels[row['class']],
+                'class_id': row['class'],
+                'score': row['confidence'],
+                'bbox': [row['xmin'], row['ymin'], row['xmax'], row['ymax']]
+            } for image_id, detection in enumerate(detections_dataframe) for _, row in detection.iterrows()
+        ]
 
-
-            object_detection_predictions.append(
-                {
-                    'image_id': image_id,
-                    'class_label': class_label,
-                    'class_id': class_ids,
-                    'score': scores,
-                    'bbox': bboxes
-                }
-            )
         return object_detection_predictions
 
+    
 
     @staticmethod
     def get_yolo_6_postprocessing(detections:tuple, class_labels: List[str]) -> List[dict]:
