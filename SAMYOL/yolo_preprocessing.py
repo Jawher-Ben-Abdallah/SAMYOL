@@ -40,7 +40,7 @@ class YOLOPreProcessing():
         inputs: List[str]
         ) -> List[np.ndarray]:
         """
-        Perform YOLO-NAS preprocessing on the inputs.
+        Perform YOLO-8 preprocessing on the inputs.
 
         Args:
             inputs List[str]: List of input image path(s) .
