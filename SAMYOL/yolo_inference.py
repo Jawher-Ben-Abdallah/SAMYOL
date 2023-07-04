@@ -1,3 +1,4 @@
+import cv2
 import torch
 from typing import List, Tuple
 from pathlib import Path
@@ -6,6 +7,24 @@ from .utils import generic_ort_inference, check_and_install_library
 
 
 class YOLOInference():
+    @staticmethod
+    def get_yolo_4_inference(model_weights: str, model_cfg: str, inputs: List) -> List:
+        """
+        Perform YOLO-4 inference.
+
+        Args:
+            model_weights (str): Path to the YOLOv4 model weights.
+            model_cfg (str): Path to the YOLOv4 model config file.
+            inputs (List): Input data.
+
+        Returns:
+            detections (List): List of detection results.
+        """
+        net = cv2.dnn.readNetFromDarknet(model_cfg, model_weights)
+        model = cv2.dnn_DetectionModel(net)
+        model.setInputParams(scale=1 / 255, size=(416, 416), swapRB=False)
+        detections = [model.detect(image, confThreshold=0.6, nmsThreshold=0.4) for image in inputs]
+        return detections
 
     @staticmethod
     def get_yolo_6_inference(model_path: str, inputs: Tuple, device: str) -> Tuple:

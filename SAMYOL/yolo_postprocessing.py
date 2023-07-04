@@ -2,6 +2,31 @@ import numpy as np
 from typing import List
 
 class YOLOPostProcessing():
+    @staticmethod
+    def get_yolo_4_postprocessing(detections:List[Tuple], class_labels: List[str]):
+        """
+        Perform YOLOv4 post-processing on the detections.
+
+        Args:
+            detections (List[Tuple]): Detections from the YOLOv4 model.
+            class_labels (List[str]): List of class labels.
+
+        Returns:
+            List[dict]: List of object detection predictions.
+        """
+        object_detection_predictions = [
+            {
+                'image_id': i,
+                'class_label': class_labels[class_id],
+                'class_id': class_id,
+                'score': score,
+                'bbox': bbox.tolist()
+            }
+            for i, detection in enumerate(detections)
+            for class_id, score, bbox in zip(detection[0], detection[1], detection[2])
+            ]
+        return object_detection_predictions
+
 
     @staticmethod
     def get_yolo_6_postprocessing(detections:tuple, class_labels: List[str]) -> List[dict]:

@@ -3,8 +3,25 @@ from typing import List, Tuple
 import numpy as np
 
 
-class YOLOPreProcessing():
-    
+class YOLOPreProcessing():    
+
+def get_yolo_4_preprocessing(
+    inputs: List[str]
+    ) -> List[np.ndarray]:
+    """
+    Perform YOLO-4 preprocessing on the inputs.
+
+    Args:
+        inputs List[str]: List of input image path(s) .
+
+    Returns:
+        inputs List[np.ndarray]: List of input images.
+    """
+    origin_RGB = [load_image(image_path) for image_path in inputs]
+
+    return [origin_RGB]
+
+
     @staticmethod
     def get_yolo_6_preprocessing(
         inputs: List[str]
